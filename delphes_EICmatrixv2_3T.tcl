@@ -1,9 +1,8 @@
 ######################################################################################################################                                
 # EIC detector model                                                                                                                                                                                     
-# Author: Miguel Arratia                                 
-# email:miguel.arratia@ucr.edu
-# based on parameters from EIC detector handbook v1.2 http://www.eicug.org/web/sites/default/files/EIC_HANDBOOK_v1.2.pdf
-# as well as on assumptions on calorimeter granularity and tracking efficiency (not specified in handbook). 
+# based on parameters from EIC detector matrix from EIC yellow report https://physdiv.jlab.org/DetectorMatrix/ (also in https://arxiv.org/abs/2103.05419). 
+# as well as on assumptions on calorimeter granularity, and efficiency.
+# email: miguel.arratia@ucr.edu, ssekula@smu.edu 
 #######################################################################################################################
 
 
@@ -11,7 +10,7 @@
 # Load any external configurations
 #######################################
 
-source customizations.tcl
+#source customizations.tcl
 
 
 #######################################
@@ -23,11 +22,11 @@ set ExecutionPath {
 
   ChargedHadronTrackingEfficiency
   ElectronTrackingEfficiency
-  MuonTrackingEfficiency
+
  
   ChargedHadronMomentumSmearing
   ElectronMomentumSmearing
-  MuonMomentumSmearing
+  
 
   TrackMerger
   TrackSmearing
@@ -66,6 +65,8 @@ set ExecutionPath {
 
   TrackCountingBTagging
 
+  PIDSystems
+
   TreeWriter
 }
 
@@ -75,36 +76,47 @@ set ExecutionPath {
 
 module ParticlePropagator ParticlePropagator {
     set InputArray Delphes/stableParticles
-    
     set OutputArray stableParticles
     set ChargedHadronOutputArray chargedHadrons
     set ElectronOutputArray electrons
-    set MuonOutputArray muons
-    
-    
-    #Values taken from EIC detector handbook v1.2
+   
     # radius of the magnetic field coverage, in m
-    set Radius 0.8
+    set Radius 1.5
     # half-length of the magnetic field coverage, in m
-    set HalfLength 1.00
-    
+    set HalfLength 1.20
     # magnetic field
-    set Bz $PARAM_BZ
+    set Bz 3.0
 }
 
 
 ####################################
 # Common Tracking Efficiency Model
 ####################################
+#Dummy efficiency (100%). Leaving structure to show how tracking dependent on pt and eta can be incorporated)
+#
+
+#Minimum pT for B = 3 T:
+#150 MeV/c for -3.0 < eta < -2.5
+#220 MeV/c for -2.5 < eta < -2.0
+#160 MeV/c for -2.0 < eta < -1.5
+#300 MeV/c for -1.5 < eta < -1.0
+#(For B = 3T: minimum pT = 400 MeV/c with 90% acceptance (similar for pi and K))
 
 set CommonTrackingEfficiency {
-    (pt <= 0.1)                                                       * (0.00) +
-    (abs(eta) <= 1.5) * (pt > 0.1   && pt <= 1.0)                     * (0.97) +
-    (abs(eta) <= 1.5) * (pt > 1.0)                                    * (0.99) +
-    (abs(eta) > 1.5 && abs(eta) <= 2.5) * (pt > 0.1   && pt <= 1.0)   * (0.96) +
-    (abs(eta) > 1.5 && abs(eta) <= 2.5) * (pt > 1.0)                  * (0.98) +
-    (abs(eta) > 2.5 && abs(eta) <= 3.5) * (pt > 0.1   && pt <= 1.0)   * (0.95) +
-    (abs(eta) > 2.5 && abs(eta) <= 3.5) * (pt > 1.0)                  * (0.97) +
+
+    (abs(eta) <= 1.0) * (pt > 0.400)                     * (1.0) +
+    (abs(eta) > 1.0 && abs(eta) <= 1.5) * (pt > 0.300)   * (1.0) +
+    (abs(eta) > 1.5 && abs(eta) <= 2.0) * (pt > 0.160)   * (1.0) +
+    (abs(eta) > 2.0 && abs(eta) <= 2.5) * (pt > 0.220)   * (1.0) +
+    (abs(eta) > 2.5 && abs(eta) <= 3.5) * (pt > 0.150)   * (1.0) +
+    (abs(eta) > 3.5)                                                  * (0.00)+
+    0.0    
+}
+
+set CommonTrackingResolution {
+    (abs(eta) <= 1.0)                        * sqrt((5e-3)^2 + (pt*cosh(eta))^2*(2e-4)^2) +
+    (abs(eta) > 1.0 && abs(eta) <= 2.5)      * sqrt((1e-2)^2 + (pt*cosh(eta))^2*(2e-4)^2) +
+    (abs(eta) > 2.5 && abs(eta) <= 3.5)      * sqrt((2e-2)^2 + (pt*cosh(eta))^2*(1e-3)^2) +
     (abs(eta) > 3.5)                                                  * (0.00)
 }
 
@@ -116,19 +128,6 @@ set CommonTrackingEfficiency {
 module Efficiency ChargedHadronTrackingEfficiency {
   set InputArray ParticlePropagator/chargedHadrons
   set OutputArray chargedHadrons
-
-  # add EfficiencyFormula {efficiency formula as a function of eta and pt}
-
-  # tracking efficiency formula for charged hadrons
-  #Made up numbers for the moment (need input from full sim)
-  #set EfficiencyFormula {                                                    (pt <= 0.1)   * (0.00) +
-  #                                         (abs(eta) <= 1.5) * (pt > 0.1   && pt <= 1.0)   * (0.95) +
-  #                                         (abs(eta) <= 1.5) * (pt > 1.0)                  * (0.98) +
-  #                       (abs(eta) > 1.5 && abs(eta) <= 2.5) * (pt > 0.1   && pt <= 1.0)   * (0.98) +
-  #                       (abs(eta) > 1.5 && abs(eta) <= 2.5) * (pt > 1.0)                  * (0.95) +
-  #                       (abs(eta) > 2.5 && abs(eta) <= 3.5) * (pt > 0.1   && pt <= 1.0)   * (0.95) +
-  #                       (abs(eta) > 2.5 && abs(eta) <= 3.5) * (pt > 1.0)                  * (0.90) +
-  #                       (abs(eta) > 3.5)                                                  *(0.00) }
   set EfficiencyFormula $CommonTrackingEfficiency
 }
 
@@ -139,50 +138,11 @@ module Efficiency ChargedHadronTrackingEfficiency {
 module Efficiency ElectronTrackingEfficiency {
   set InputArray ParticlePropagator/electrons
   set OutputArray electrons
-
-  # set EfficiencyFormula {efficiency formula as a function of eta and pt}
-
-  # tracking efficiency formula for electrons
-
-   ##Made up numbers for the moment (need input from full sim)
-
-  #set EfficiencyFormula {                                                    (pt <= 0.1)   * (0.00) +
-  #                                         (abs(eta) <= 1.5) * (pt > 0.1   && pt <= 1.0)   * (0.95) +
-  #                                         (abs(eta) <= 1.5) * (pt > 1.0)                  * (0.98) +
-  #                       (abs(eta) > 1.5 && abs(eta) <= 2.5) * (pt > 0.1   && pt <= 1.0)   * (0.98) +
-  #                       (abs(eta) > 1.5 && abs(eta) <= 2.5) * (pt > 1.0)                  * (0.95) +
-  #                       (abs(eta) > 2.5 && abs(eta) <= 3.5) * (pt > 0.1   && pt <= 1.0)   * (0.95) +
-  #                       (abs(eta) > 2.5 && abs(eta) <= 3.5) * (pt > 1.0)                  * (0.90) +
-  #                       (abs(eta) > 3.5)                                                  *(0.00) }
   set EfficiencyFormula $CommonTrackingEfficiency
 
 }
 
-##############################
-# Muon tracking efficiency
-##############################
 
-module Efficiency MuonTrackingEfficiency {
-  set InputArray ParticlePropagator/muons
-  set OutputArray muons
-
-  # set EfficiencyFormula {efficiency formula as a function of eta and pt}
-
-  # tracking efficiency formula for muons
-
-   ##Made up numbers for the moment (need input from full sim)
-
-  #set EfficiencyFormula {                                                    (pt <= 0.1)   * (0.00) +
-  #                                         (abs(eta) <= 1.5) * (pt > 0.1   && pt <= 1.0)   * (0.95) +
-  #                                         (abs(eta) <= 1.5) * (pt > 1.0)                  * (0.98) +
-  #                       (abs(eta) > 1.5 && abs(eta) <= 2.5) * (pt > 0.1   && pt <= 1.0)   * (0.98) +
-  #                       (abs(eta) > 1.5 && abs(eta) <= 2.5) * (pt > 1.0)                  * (0.95) +
-  #                       (abs(eta) > 2.5 && abs(eta) <= 3.5) * (pt > 0.1   && pt <= 1.0)   * (0.95) +
-  #                       (abs(eta) > 2.5 && abs(eta) <= 3.5) * (pt > 1.0)                  * (0.90) +
-  #                       (abs(eta) > 3.5)                                                  *(0.00) }
-  set EfficiencyFormula $CommonTrackingEfficiency
-
-}
 
 ########################################
 # Momentum resolution for charged tracks
@@ -191,33 +151,7 @@ module Efficiency MuonTrackingEfficiency {
 module MomentumSmearing ChargedHadronMomentumSmearing {
   set InputArray ChargedHadronTrackingEfficiency/chargedHadrons
   set OutputArray chargedHadrons
-
-  # set ResolutionFormula {resolution formula as a function of eta and pt}
-
-  # resolution formula for charged hadrons. 
-  # Based on EIC detector handbook v1.2 
-
-  set ResolutionFormula {                  (abs(eta) <= 1.0) * (pt > 0.1) * sqrt((5e-3)^2 + (pt*cosh(eta))^2*(5e-4)^2) +
-                         (abs(eta) > 1.0 && abs(eta) <= 2.5) * (pt > 0.1) * sqrt((1e-2)^2 + (pt*cosh(eta))^2*(5e-4)^2) +
-	                 (abs(eta) > 2.5 && abs(eta) <= 3.5) * (pt > 0.1) * sqrt((2e-2)^2 + (pt*cosh(eta))^2*(1e-3)^2)  }
-}
-
-###################################
-# Momentum resolution for muons
-###################################
-
-module MomentumSmearing MuonMomentumSmearing {
-  set InputArray MuonTrackingEfficiency/muons
-  set OutputArray muons
-
-  # set ResolutionFormula {resolution formula as a function of eta and pt}
-  # Resolution is parametrized as a function of p, not pT, in the matrix.
-    
-  # resolution formula for charged hadrons. 
-  # Based on EIC detector handbook v1.2 
-  set ResolutionFormula {                  (abs(eta) <= 1.0) * (pt > 0.1) * sqrt((5e-3)^2 + (pt*cosh(eta))^2*(5e-4)^2) +
-                         (abs(eta) > 1.0 && abs(eta) <= 2.5) * (pt > 0.1) * sqrt((1e-2)^2 + (pt*cosh(eta))^2*(5e-4)^2) +
-	                 (abs(eta) > 2.5 && abs(eta) <= 3.5) * (pt > 0.1) * sqrt((2e-2)^2 + (pt*cosh(eta))^2*(1e-3)^2)  }
+  set ResolutionFormula  $CommonTrackingResolution
 }
 
 
@@ -225,20 +159,10 @@ module MomentumSmearing MuonMomentumSmearing {
 ###################################
 # Momentum resolution for electrons
 ###################################
-
-##Electron needs some thinking for EIC
-
-
 module MomentumSmearing ElectronMomentumSmearing {
   set InputArray ElectronTrackingEfficiency/electrons
   set OutputArray electrons
-
-  # set ResolutionFormula {resolution formula as a function of eta and energy}
-    # resolution formula for electrons; same as above. Needs some thinking on how to combine with EMCAL
-  
-  set ResolutionFormula {                  (abs(eta) <= 1.0) * (pt > 0.1) * sqrt((5e-3)^2 + (pt*cosh(eta))^2*(5e-4)^2) +
-                         (abs(eta) > 1.0 && abs(eta) <= 2.5) * (pt > 0.1) * sqrt((1e-2)^2 + (pt*cosh(eta))^2*(5e-4)^2) +
-                         (abs(eta) > 2.5 && abs(eta) <= 3.5) * (pt > 0.1) * sqrt((2e-2)^2 + (pt*cosh(eta))^2*(1e-3)^2)  }
+  set ResolutionFormula $CommonTrackingResolution 
 }
 
 
@@ -250,7 +174,7 @@ module Merger TrackMerger {
 # add InputArray InputArray
   add InputArray ChargedHadronMomentumSmearing/chargedHadrons
   add InputArray ElectronMomentumSmearing/electrons
-  add InputArray MuonMomentumSmearing/muons
+  
   set OutputArray tracks
 }
 
@@ -258,24 +182,21 @@ module Merger TrackMerger {
 # Track impact parameter smearing                                                                   
 ################################                                                                    
 
+
 module TrackSmearing TrackSmearing {
   set InputArray TrackMerger/tracks
 #  set BeamSpotInputArray BeamSpotFilter/beamSpotParticle
   set OutputArray tracks
 #  set ApplyToPileUp true
-
   # magnetic field
-  set Bz $PARAM_BZ
-
+  set Bz 3.0
   set PResolutionFormula { 0.0 }
   set CtgThetaResolutionFormula { 0.0 }
   set PhiResolutionFormula { 0.0 }
-  set D0ResolutionFormula {
-  	( abs(eta) <= 3.5 ) * ( pt > 0.1 ) * 0.020
-  }
-  set DZResolutionFormula {
-  	( abs(eta) <= 3.5 ) * ( pt > 0.1 ) * 0.020
-  }
+  set D0ResolutionFormula "( abs(eta) <= 2.5 && abs(eta)>1.0 ) * (sqrt( (0.010)^2 + (0.040/pt)^2)) +
+                             ( abs(eta) <= 1.0 ) *                 (sqrt( (0.005)^2 + (0.030/pt)^2))"
+  set DZResolutionFormula "( abs(eta) <= 2.5 && abs(eta)>1.0 ) *   (sqrt( (0.020)^2 + (0.100/pt)^2)) + 
+                             ( abs(eta) <= 1.0 )               *   (sqrt( (0.005)^2 + (0.030/pt)^2)) "
     
 }
 
@@ -293,7 +214,10 @@ module SimpleCalorimeter ECal {
   set EFlowTowerOutputArray eflowPhotons
 
   set IsEcal true
-  set EnergyMin 0.1  
+  set EnergyMin 0.050
+  #does not seem possible to set minimum dependent on eta as spec in the YR.  
+  
+		  
   set EnergySignificanceMin 1.0
 
   set SmearTowerCenter true
@@ -305,40 +229,33 @@ module SimpleCalorimeter ECal {
   # the list ends with the higher edged of the last tower
 
   # Granularity is not discussed in EIC detector handbook. 
-
-
   ##BARREL
- # assume 0.0174 x 0.020 resolution in phi,eta in the barrel |eta| < 1.0
-  set PhiBins {}
-  for {set i -180} {$i <= 180} {incr i} {
-    add PhiBins [expr {$i * $pi/180.0}]
-  }
-
- #deta=0.02 units for |eta| <=1.0
-  for {set i -50} {$i < 50} {incr i} {
-        set eta [expr {$i * 0.02}]
-        add EtaPhiBins $eta $PhiBins
-  }
-
-  ##ENDCAP
-  # assume 0.020 x 0.020 resolution in phi,eta in the endcap 1.0<|eta| < 4.0
-  set PhiBins {}
-  for {set i -180} {$i <= 180} {incr i} {
-    add PhiBins [expr {$i * $pi/180.0}]
-  }
-
-  #deta=0.02 units for 1.0 < |eta| <= 4.0
-  #first, from -4.0 to -1.0
-  for {set i 1} {$i <=151} {incr i} {
-        set eta [expr {-4.02 + $i * 0.02}]
-        add EtaPhiBins $eta $PhiBins
+  #assume 0.1 x 0.1 (real cell size will be smaller, so this is to represent some cluster)
+    
+    set PhiBins {}
+    for {set i -30} {$i <=30} {incr i} {
+	add PhiBins [expr {$i * $pi/30.0}]
     }
-  #same for 1.0 to 4.0
-    for  {set i 1} {$i <=151} {incr i} {
-        set eta [expr {0.98 + $i * 0.02}]
-        add EtaPhiBins $eta $PhiBins
+    for {set i -10} {$i <=10} {incr i} {
+	set eta [expr {$i * 0.1}]
+	add EtaPhiBins $eta $PhiBins
     }
 
+    ## Coverage is -3.5, -1.0 , and +1.0 to 3.5.
+   ## assume 0.1 x 0.1 (real cell size will be smaller, so this is to represent some cluster)
+    set PhiBins {}
+    for {set i -30} {$i <=30} {incr i} {
+	add PhiBins [expr {$i * $pi/30.0}]
+    }
+
+    for {set i 1} {$i <=26} {incr i} {
+	set eta [expr {-3.6 + $i*0.1}]
+	add EtaPhiBins $eta $PhiBins
+    }
+    for {set i 1} {$i <=26} {incr i} {
+	set eta [expr {0.9 + $i*0.1 }]
+	add EtaPhiBins $eta $PhiBins
+    }
  
 
   add EnergyFraction {0} {0.0}
@@ -357,19 +274,14 @@ module SimpleCalorimeter ECal {
   add EnergyFraction {1000035} {0.0}
   add EnergyFraction {1000045} {0.0}
   # energy fractions for K0short and Lambda
-  add EnergyFraction {310} {0.3}
-  add EnergyFraction {3122} {0.3}
+ # add EnergyFraction {310} {0.3}
+ # add EnergyFraction {3122} {0.3}
 
-  # set ResolutionFormula {resolution formula as a function of eta and energy}
-  # EM - W/ScFi, granularity 2.5 cm x 2.5 cm, 12% stochastic, 2% constant terms, as suggested by Oleg Tsai.
-   
-
-   set ResolutionFormula {    (eta <= -2.0 && eta>-4.0)                          * sqrt(energy^2*0.01^2 + energy*0.02^2)+ \
-                              (eta <= -1.0 && eta>-2.0 )                         * sqrt(energy^2*0.01^2 + energy*0.07^2)+ \ 
-                              (eta <= 1.0  && eta> -1.0 )                        * sqrt(energy^2*0.01^2 + energy*0.10^2)+ \
-                              (eta <= 4.0  &&  eta>1.0 )                         * sqrt(energy^2*0.02^2 + energy*0.12^2)} 
-
-
+  set ResolutionFormula {          (eta <= -2.0 && eta>-3.5)                          * sqrt(energy^2*0.01^2 + energy*0.025^2 + 0.01^2)+ \
+                 		   (eta <= -1.0 && eta>-2.0 )                         * sqrt(energy^2*0.02^2 + energy*0.08^2 + 0.02^2 )+ \
+				   (eta <= 1.0  && eta> -1.0 )                        * sqrt(energy^2*0.03^2 + energy*0.14^2 + 0.02^2 )+ \
+				   (eta <= 3.5  &&  eta>1.0 )                         * sqrt(energy^2*0.02^2 + energy*0.12^2 + 0.02^2)}
+    
 }
 
 
@@ -388,19 +300,12 @@ module SimpleCalorimeter HCal {
   set IsEcal false
 
   ##Assumes noise 100 MeV per tower. 
-  set EnergyMin 0.4
+  set EnergyMin 0.5
   set EnergySignificanceMin 1.0
 
   set SmearTowerCenter true
 
   set pi [expr {acos(-1)}]
-
-  # lists of the edges of each tower in eta and phi
-  # each list starts with the lower edge of the first tower
-  # the list ends with the higher edged of the last tower
-
-  # Granularity is not discussed in EIC detector handbook. 
- ## Barrel = 0.1x0.1 , following sPHENIX HCAL
 
     set PhiBins {}
     for {set i -30} {$i <=30} {incr i} {
@@ -410,21 +315,17 @@ module SimpleCalorimeter HCal {
 	set eta [expr {$i * 0.1}]
 	add EtaPhiBins $eta $PhiBins
     }
-
-    ## Endcap granularity: 0.025 x 0.025, which follows from 10x10 cm2 towers at 3.6 m.
-    ## Coverage is -4.0, -1.0 , and +1.0 to 4.0. 
-    set PhiBins {}
-    for {set i -120} {$i <=120} {incr i} {
-	add PhiBins [expr {$i * $pi/120.0}]
+    
+    for {set i -30} {$i <=30} {incr i} {
+	add PhiBins [expr {$i * $pi/30.0}]
     }
-        
-    for {set i 1} {$i <=121} {incr i} {
-	set eta [expr {-4.025 + $i * 0.025}]
+
+    for {set i 1} {$i <=26} {incr i} {
+	set eta [expr {-3.6 + $i*0.1 }]
 	add EtaPhiBins $eta $PhiBins
     }
-    
-    for {set i 1} {$i <=121} {incr i} {
-	set eta [expr {0.975 + $i * 0.025 }]
+    for {set i 1} {$i <=26} {incr i} {
+	set eta [expr {0.9 + $i*0.1 }]
 	add EtaPhiBins $eta $PhiBins
     }
 
@@ -445,17 +346,15 @@ module SimpleCalorimeter HCal {
   add EnergyFraction {1000035} {0.0}
   add EnergyFraction {1000045} {0.0}
   # energy fractions for K0short and Lambda
-  add EnergyFraction {310} {0.7}
-  add EnergyFraction {3122} {0.7}
-
-  ##Resolution in endcaps based on EIC detector handbook 1.2
-  ## Resolution midrapidity, as per sPHENIX HCAL
+  #add EnergyFraction {310} {0.7}
+  #add EnergyFraction {3122} {0.7}
 
   # set HCalResolutionFormula {resolution formula as a function of eta and energy}
-  set ResolutionFormula {    (eta <= -1.0 && eta>-4.0)                       * sqrt(energy^2*0.10^2 + energy*0.50^2)+
+  set ResolutionFormula {    (eta <= -1.0 && eta>-3.5)                       * sqrt(energy^2*0.10^2 + energy*0.50^2)+
                              (eta <= 1.0 && eta>-1.0 )                       * sqrt(energy^2*0.10^2 + energy*1.00^2)+
-                             (eta <= 4.0  && eta>1.0 )                       * sqrt(energy^2*0.10^2 + energy*0.50^2)}  
-
+                             (eta <= 3.5 && eta>1.0 )                       * sqrt(energy^2*0.10^2 + energy*0.50^2)
+  }
+    
 }
 
 
@@ -537,10 +436,7 @@ module Efficiency PhotonEfficiency {
   # set EfficiencyFormula {efficiency formula as a function of eta and pt}
 
   # efficiency formula for photons
-  set EfficiencyFormula {                                      (pt <= 10.0) * (0.00) +
-                                           (abs(eta) <= 1.5) * (pt > 10.0)  * (0.95) +
-                         (abs(eta) > 1.5 && abs(eta) <= 2.5) * (pt > 10.0)  * (0.85) +
-                         (abs(eta) > 2.5)                                   * (0.00)}
+    set EfficiencyFormula { 1} 
 }
 
 ##################
@@ -572,8 +468,7 @@ module Efficiency ElectronEfficiency {
   # set EfficiencyFormula {efficiency formula as a function of eta and pt}
 
   # efficiency formula for electrons
-  set EfficiencyFormula {                                      (pt <= 1.0) * (0.00) +
-                                           (abs(eta) <= 3.5) * (pt > 1.0)  * (1.0) }
+    set EfficiencyFormula {1}
 }
 
 ####################
@@ -651,7 +546,7 @@ module FastJetFinder GenJetFinder {
   set JetAlgorithm 6
   set ParameterR 1.0
 
-  set JetPTMin 5.0
+  set JetPTMin 3.0
 }
 
 #########################
@@ -685,8 +580,9 @@ module FastJetFinder FastJetFinder {
   set AxisMode 4
 
   set ComputeTrimming 1
-  set RTrim 0.2
-  set PtFracTrim 0.05
+  set RTrim 0.4
+  set PtFracTrim 0.20
+  #set PtFracTrim 0.05
 
   set ComputePruning 1
   set ZcutPrun 0.1
@@ -698,8 +594,7 @@ module FastJetFinder FastJetFinder {
   set SymmetryCutSoftDrop 0.1
   set R0SoftDrop 0.8
 
-  set JetPTMin 5.0
-}
+  set JetPTMin 3.0}
 
 
 
@@ -729,8 +624,8 @@ module JetFlavorAssociation JetFlavorAssociation {
   set JetInputArray JetEnergyScale/jets
 
   set DeltaR 0.5
-  set PartonPTMin 1.0
-  set PartonEtaMax 3.5
+  set PartonPTMin 4.0
+  set PartonEtaMax 4.0
 
 }
 
@@ -743,7 +638,7 @@ module JetFlavorAssociation GenJetFlavorAssociation {
 
   set DeltaR 0.5
   set PartonPTMin 1.0
-  set PartonEtaMax 3.5
+  set PartonEtaMax 4.0
 
 }
 
@@ -768,33 +663,167 @@ module UniqueObjectFinder UniqueObjectFinder {
 module TrackCountingBTagging TrackCountingBTagging {
     set JetInputArray JetEnergyScale/jets
     set TrackInputArray HCal/eflowTracks
-    
     set BitNumber 0
-    
     # maximum distance between jet and track
     set DeltaR 0.5
-    
     # minimum pt of tracks
-    set TrackPtMin $PARAM_TRACKPTMIN
-    #set TrackPtMin 1.0
-    
+    set TrackPtMin 1.0
     # maximum transverse impact parameter (in mm)
-    set TrackIPMax $PARAM_TRACKIPMAX
-    #set TrackIPMax 3
-    
+    set TrackIPMax 3
     # minimum ip significance for the track to be counted
-    set SigMin $PARAM_TRACKSIGMIN
-    #set SigMin 2.0
+    set SigMin 2.0
     set Use3D true
     # alternate setting for 2D IP (default)
     #  set SigMin 1.3
     #  set Use3D false
-    
     # minimum number of tracks (high efficiency n=2, high purity n=3)
     #set Ntracks 3
-    set Ntracks $PARAM_TRACKSNMIN
+    
 }
 
+##################
+# PID Efficiency Maps
+##################
+
+# These maps are built from the table in section 8.6 of the EIC Yellow Report.
+# When the table says that two species are separated by "3 sigma" we assume the 
+# following:
+#
+# 1. Each specie is Gaussian distributed in a variable x each with the same Gaussian width, s.
+# 2. The separation is defined by S. For 3 sigma, S=3.
+# 3. The separation takes into account the two widths of the individual Gaussians, S = sqrt(s^2 + s^2). 
+#    Thus, s = S/sqrt(2) for each of the presumed Gaussians for each specie.
+# 4. To compute the identification efficiency, the probability that specie A is idenfied as A, one
+#    uses the integral of the Gaussian within width s, e.g. p = 1 - ROOT::Math::gaussian_pdf(s) in ROOT.
+# 5. TO instead compute the misidentfication probability, the probability that B -> A, one instead uses
+#    the one-sided cumulative distribution function, e.g. p = 1 - ROOT::Math::normal_cdf(s) in ROOT.
+# EXAMPLE:
+#
+# Electrons need to be separable from pions at the level of 3 sigma for 1.0 <= eta <= 3.5. Thus S = 3.
+# That means s = 3/sqrt(2) = 2.121. Thus p(e->e) = 1 - ROOT::Math::gaussian_pdf(2.121) = 0.958. 
+# Conversely, p(pi -> e) = 1 - ROOT::Math::normal_cdf(2.121) = 0.017. Once can also compute from this
+# p(e->pi) = 1 - ROOT::Math::normal_cdf(2.121) (assuming a 2-species model for PID) and p(pi->pi) = 0.958 (integral of gaussian within s)
+#
+
+module IdentificationMap PIDSystems { 
+    set InputArray HCal/eflowTracks 
+    set OutputArray tracks 
+    
+    
+    # Electron/Pion identification, treated as a 2-species problem
+    add EfficiencyFormula {-11} {-11} { (abs(eta) > 3.5 || pt * cosh(eta) < 0.050) * (0.00) +
+	(abs(eta) <= 3.5 && pt * cosh(eta) >= 0.050) * (
+							(-3.5 <= eta && eta < 1.0) * (1.00) +
+							(1.0 <= eta && eta <= 3.5) * (0.95795179)) }
+    
+    add EfficiencyFormula {211} {-11} { (abs(eta) > 3.5 || pt * cosh(eta) < 0.050) * (0.00) +
+	(abs(eta) <= 3.5 && pt * cosh(eta) >= 0.050) * (
+							(-3.5 <= eta && eta < 1.0) * (1e-4) +
+							(1.0 <= eta && eta <= 3.5) * (0.016947427)) }
+    
+    add EfficiencyFormula {-11} {211} { (abs(eta) > 3.5 || pt * cosh(eta) < 0.050) * (1.00) +
+	(abs(eta) <= 3.5 && pt * cosh(eta) >= 0.050) * (
+							(-3.5 <= eta && eta < 1.0) * (0.00) +
+							(1.0 <= eta && eta <= 3.5) * (0.016947427)) }
+    
+    add EfficiencyFormula {211} {211} { (abs(eta) > 3.5 || pt * cosh(eta) < 0.050) * (1.00) +
+	(abs(eta) <= 3.5 && pt * cosh(eta) >= 0.050) * (
+							(-3.5 <= eta && eta < 1.0) * (0.99990000) +
+							(1.0 <= eta && eta <= 3.5) * (0.95795179)) }
+
+    # pi/K/proton identification, assuming 3 sigma separation between all species! (all pair-wise separations are 3 sigma)
+    # Kaons must have p > 0.135 GeV/c
+    # Pions must have p > 0.100 GeV/c
+
+    add EfficiencyFormula {321} {321} { (abs(eta) > 3.5 || pt * cosh(eta) < 0.135) * (0.00) +
+	(abs(eta) <= 3.5 && pt * cosh(eta) >= 0.135) * (
+							(eta < -1.0 && pt * cosh(eta) <= 7) * (0.95795179) +
+							(-1.0 <= eta && eta < 0.5 && pt * cosh(eta) <= 10) * (0.95795179) +
+							(0.5 <= eta && eta < 1.0 && pt * cosh(eta) <= 15) * (0.95795179) +
+							(1.0 <= eta && eta < 1.5 && pt * cosh(eta) <= 30) * (0.95795179) +
+							(1.5 <= eta && eta < 2.5 && pt * cosh(eta) <= 50) * (0.95795179) +
+							(2.5 <= eta && eta <= 3.5 && pt * cosh(eta) <= 45) * (0.95795179)) }
+
+    add EfficiencyFormula {321} {-211} { (abs(eta) > 3.5 || pt * cosh(eta) < 0.135) * (1.00) +
+	(abs(eta) <= 3.5 && pt * cosh(eta) >= 0.135) * (
+							(eta < -1.0 && pt * cosh(eta) <= 7) * (0.016947427) +
+							(-1.0 <= eta && eta < 0.5 && pt * cosh(eta) <= 10) * (0.016947427) +
+							(0.5 <= eta && eta < 1.0 && pt * cosh(eta) <= 15) * (0.016947427) +
+							(1.0 <= eta && eta < 1.5 && pt * cosh(eta) <= 30) * (0.016947427) +
+							(1.5 <= eta && eta < 2.5 && pt * cosh(eta) <= 50) * (0.016947427) +
+							(2.5 <= eta && eta <= 3.5 && pt * cosh(eta) <= 45) * (0.016947427)) }
+
+    add EfficiencyFormula {321} {2212} { (abs(eta) > 3.5 || pt * cosh(eta) < 0.135) * (1.00) +
+	(abs(eta) <= 3.5 && pt * cosh(eta) >= 0.135) * (
+							(eta < -1.0 && pt * cosh(eta) <= 7) * (0.016947427) +
+							(-1.0 <= eta && eta < 0.5 && pt * cosh(eta) <= 10) * (0.016947427) +
+							(0.5 <= eta && eta < 1.0 && pt * cosh(eta) <= 15) * (0.016947427) +
+							(1.0 <= eta && eta < 1.5 && pt * cosh(eta) <= 30) * (0.016947427) +
+							(1.5 <= eta && eta < 2.5 && pt * cosh(eta) <= 50) * (0.016947427) +
+							(2.5 <= eta && eta <= 3.5 && pt * cosh(eta) <= 45) * (0.016947427)) }
+
+    
+    add EfficiencyFormula {-211} {321} { (abs(eta) > 3.5 || pt * cosh(eta) < 0.100) * (0.00) +
+	(abs(eta) <= 3.5 && pt * cosh(eta) >= 0.100) * (
+							(eta < -1.0 && pt * cosh(eta) <= 7) * (0.016947427) +
+							(-1.0 <= eta && eta < 0.5 && pt * cosh(eta) <= 10) * (0.016947427) +
+							(0.5 <= eta && eta < 1.0 && pt * cosh(eta) <= 15) * (0.016947427) +
+							(1.0 <= eta && eta < 1.5 && pt * cosh(eta) <= 30) * (0.016947427) +
+							(1.5 <= eta && eta < 2.5 && pt * cosh(eta) <= 50) * (0.016947427) +
+							(2.5 <= eta && eta <= 3.5 && pt * cosh(eta) <= 45) * (0.016947427)) }
+
+    add EfficiencyFormula {-211} {2212} { (abs(eta) > 3.5 || pt * cosh(eta) < 0.100) * (0.00) +
+	(abs(eta) <= 3.5 && pt * cosh(eta) >= 0.100) * (
+							(eta < -1.0 && pt * cosh(eta) <= 7) * (0.016947427) +
+							(-1.0 <= eta && eta < 0.5 && pt * cosh(eta) <= 10) * (0.016947427) +
+							(0.5 <= eta && eta < 1.0 && pt * cosh(eta) <= 15) * (0.016947427) +
+							(1.0 <= eta && eta < 1.5 && pt * cosh(eta) <= 30) * (0.016947427) +
+							(1.5 <= eta && eta < 2.5 && pt * cosh(eta) <= 50) * (0.016947427) +
+							(2.5 <= eta && eta <= 3.5 && pt * cosh(eta) <= 45) * (0.016947427)) }
+
+    add EfficiencyFormula {211} {211} { (abs(eta) > 3.5 || pt * cosh(eta) < 0.100) * (1.00) +
+	(abs(eta) <= 3.5 && pt * cosh(eta) >= 0.100) * (
+							(eta < -1.0 && pt * cosh(eta) <= 7) * (0.95795179) +
+							(-1.0 <= eta && eta < 0.5 && pt * cosh(eta) <= 10) * (0.95795179) +
+							(0.5 <= eta && eta < 1.0 && pt * cosh(eta) <= 15) * (0.95795179) +
+							(1.0 <= eta && eta < 1.5 && pt * cosh(eta) <= 30) * (0.95795179) +
+							(1.5 <= eta && eta < 2.5 && pt * cosh(eta) <= 50) * (0.95795179) +
+							(2.5 <= eta && eta <= 3.5 && pt * cosh(eta) <= 45) * (0.95795179)) }
+    
+
+    add EfficiencyFormula {2212} {2212} { (abs(eta) > 3.5 || pt * cosh(eta) < 0.100) * (1.00) +
+	(abs(eta) <= 3.5 && pt * cosh(eta) >= 0.100) * (
+							(eta < -1.0 && pt * cosh(eta) <= 7) * (0.95795179) +
+							(-1.0 <= eta && eta < 0.5 && pt * cosh(eta) <= 10) * (0.95795179) +
+							(0.5 <= eta && eta < 1.0 && pt * cosh(eta) <= 15) * (0.95795179) +
+							(1.0 <= eta && eta < 1.5 && pt * cosh(eta) <= 30) * (0.95795179) +
+							(1.5 <= eta && eta < 2.5 && pt * cosh(eta) <= 50) * (0.95795179) +
+							(2.5 <= eta && eta <= 3.5 && pt * cosh(eta) <= 45) * (0.95795179)) }
+
+
+    add EfficiencyFormula {2212} {321} { (abs(eta) > 3.5 || pt * cosh(eta) < 0.100) * (0.00) +
+	(abs(eta) <= 3.5 && pt * cosh(eta) >= 0.100) * (
+							(eta < -1.0 && pt * cosh(eta) <= 7) * (0.016947427) +
+							(-1.0 <= eta && eta < 0.5 && pt * cosh(eta) <= 10) * (0.016947427) +
+							(0.5 <= eta && eta < 1.0 && pt * cosh(eta) <= 15) * (0.016947427) +
+							(1.0 <= eta && eta < 1.5 && pt * cosh(eta) <= 30) * (0.016947427) +
+							(1.5 <= eta && eta < 2.5 && pt * cosh(eta) <= 50) * (0.016947427) +
+							(2.5 <= eta && eta <= 3.5 && pt * cosh(eta) <= 45) * (0.016947427)) }
+
+
+    add EfficiencyFormula {2212} {-221} { (abs(eta) > 3.5 || pt * cosh(eta) < 0.100) * (0.00) +
+	(abs(eta) <= 3.5 && pt * cosh(eta) >= 0.100) * (
+							(eta < -1.0 && pt * cosh(eta) <= 7) * (0.016947427) +
+							(-1.0 <= eta && eta < 0.5 && pt * cosh(eta) <= 10) * (0.016947427) +
+							(0.5 <= eta && eta < 1.0 && pt * cosh(eta) <= 15) * (0.016947427) +
+							(1.0 <= eta && eta < 1.5 && pt * cosh(eta) <= 30) * (0.016947427) +
+							(1.5 <= eta && eta < 2.5 && pt * cosh(eta) <= 50) * (0.016947427) +
+							(2.5 <= eta && eta <= 3.5 && pt * cosh(eta) <= 45) * (0.016947427)) }
+
+    # Everything else with no PID system coverage is 100% identified as pion
+    add EfficiencyFormula {0} {0} { 0.00 }
+
+}
 
 ##################
 # ROOT tree writer
@@ -814,6 +843,8 @@ module TreeWriter TreeWriter {
   add Branch HCal/eflowTracks EFlowTrack Track
   add Branch ECal/eflowPhotons EFlowPhoton Tower
   add Branch HCal/eflowNeutralHadrons EFlowNeutralHadron Tower
+
+  add Branch PIDSystems/tracks PIDSystemsTrack Track
 
   add Branch GenJetFinder/jets GenJet Jet
   add Branch GenMissingET/momentum GenMissingET MissingET
