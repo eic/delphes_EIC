@@ -3,9 +3,8 @@
 The documentation is automatically built after commit to master branch.
 
 By default the documentation should be written in reStructuredText. Markdown files are acceptible also but have limited 
-formatting possibilities compared to reStructuredText. `reStructuredText documentation`_.
+formatting possibilities compared to reStructuredText. `reStructuredText documentation <https://docutils.sourceforge.io/docs/user/rst/quickref.html>`_
 
-.. _`reStructuredText documentation`: https://docutils.sourceforge.io/docs/user/rst/quickref.html
 
 Local Build
 -----------
@@ -15,9 +14,9 @@ Requirments:
 ~~~~~~~~~~~~
 
 
-- [Sphinx](http://www.sphinx-doc.org/en/master/) - Python documentation generator
-- [Read the Docs Sphinx Theme](https://sphinx-rtd-theme.readthedocs.io/en/stable/) - Theme for final output
-- [recommonmark](https://github.com/miyakogi/m2r) - Markdown to reStructuredText
+- `Sphinx <http://www.sphinx-doc.org/en/master>`_ - Python documentation generator
+- `Read the Docs Sphinx Theme <https://sphinx-rtd-theme.readthedocs.io/en/stable/>`_ - Theme for final output
+- `recommonmark <https://github.com/miyakogi/m2r>`_ - Markdown to reStructuredText
 
 
 .. code: bash

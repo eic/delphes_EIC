@@ -57,7 +57,7 @@ templates_path = ['_templates']
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-# source_suffix = ['.rst', '.md']
+#source_suffix = ['.rst', '.md']
 source_suffix = '.rst'
 
 # The master toctree document.
@@ -139,7 +139,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'DelphesEIC.tex', u'Delphes EIC Documentation',
-     u'Yulia Furletova, Dmitry Romanov', 'manual'),
+     u'Miguel Arratia, Stephen Sekula', 'manual'),
 ]
 
 
@@ -148,7 +148,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'geant4eic', u'Geant 4 EIC Documentation',
+    (master_doc, 'delphes-eic', u'Delphes EIC',
      [author], 1)
 ]
 
@@ -159,8 +159,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'Geant4EIC', u'Geant 4 EIC Documentation',
-     author, 'Geant4EIC', 'One line description of project.',
+    (master_doc, 'delphes-eic', u'Delphes 4 EIC Documentation',
+     author, 'delphes-eic', 'One line description of project.',
      'Miscellaneous'),
 ]
 
