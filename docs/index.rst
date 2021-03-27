@@ -7,7 +7,7 @@ Delphes EIC
    :maxdepth: 2
    :caption: Getting started:
 
-   install_manual
+   install.md
 
    
 .. toctree::

@@ -1,7 +1,7 @@
-# Installation
+## Installation
 
 
-## EJPM install
+### EJPM install
 
 ejpm is EIC software centric package/build manager. It is the designed
 to be the default tool to build G4E on users machine, as it helps with:
@@ -95,7 +95,7 @@ Here is the sample output:
 ```
 
 
-## Manual installation
+### Manual installation
 
 1. Install LHAPDF
    * https://lhapdf.hepforge.org/
