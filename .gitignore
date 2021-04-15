@@ -51,3 +51,5 @@
 .nfs*
 
 # End of https://www.gitignore.io/api/c++,linux
+
+docs/_build/
