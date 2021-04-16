@@ -87,20 +87,7 @@ if (iLepScat > (event.size()-1)) {
  }
 ```
 
-Now compile the Pythia8 code. This will fix the bug.
 
-## Running Monte Carlo Production
-
-The following command line will run these options:
-
-* e-p beam energies of 10 and 275, respectively
-* LHAPDF6:CT18NNLO PDF set
-* Output will be written to CC_DIS_e10_p275_CT18NNLO/0/ (where 0 is the task ID, specified using SLURM_ARRAY_TASK_ID)
-* 100,000 events generated in a single run of the command
-
-```
-SLURM_ARRAY_TASK_ID=0 ./run_study.py --template delphes_card_allsilicon_3T.tcl --commands CC_DIS_template.cmnd -p '{"PARAM_NEVENTS": 100000, "PARAM_HADBEAM_ENERGY": 275, "PARAM_EBEAM_ENERGY": 10, "PARAM_PDFSET": "LHAPDF6:CT18NNLO"}' -n CC_DIS_e10_p275_CT18NNLO
-```
 
 ### EIC Collider Variations
 
