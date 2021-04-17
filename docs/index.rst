@@ -31,7 +31,7 @@ Welcome to the ``delphes_EIC`` project. This code aims to deliver a fast-simulat
 - Science Requirements and Detector Concepts for the Electron-Ion Collider: EIC Yellow Report.R. Abdul Khalek, A. Accardi, J. Adam, D. Adamiak, W. Akers et al. e-Print: https://arxiv.org/abs/2103.05419 [physics.ins-det]
 
 
-.. image:: https://github.com/eic/delphes_EIC/blob/master/images/EICDetector_3D_CCDIS_CharmJet.png
+.. image:: https://github.com/eic/delphes_EIC/raw/master/images/EICDetector_3D_CCDIS_CharmJet.png
 
 .. image:: https://github.com/eic/delphes_EIC/raw/master/images/EICDetector_3D_CCDIS_CharmJet_DisplacedVtx.png
 
