@@ -67,8 +67,10 @@ Generating Events
 Run generation command:
 
 .. code:: bash
-
-   ./DelphesPythia8 cards/delphes_card_allsilicon_3T.tcl CC_DIS.cmnd out.root
+   # PYTHIA8.3 and Delphes don't compile together, so we recommend a
+   # 2-step process for now.
+   # Generate HepMC output using PYTHIA8, then read into Delphes
+   ./DelphesHepMC cards/delphes_card_allsilicon_3T.tcl out.root input.hepmc
 
 You can see examples of analysis code in the Delphes page above
 
