@@ -32,6 +32,7 @@ Welcome to the ``delphes_EIC`` project. This code aims to deliver a fast-simulat
 
 
 .. image:: https://github.com/eic/delphes_EIC/blob/master/images/EICDetector_3D_CCDIS_CharmJet.png
+
 .. image:: https://github.com/eic/delphes_EIC/raw/master/images/EICDetector_3D_CCDIS_CharmJet_DisplacedVtx.png
 
 What's New?
