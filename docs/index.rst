@@ -26,14 +26,13 @@ delphes_EIC
 
 Welcome to the ``delphes_EIC`` project. This code aims to deliver a fast-simulation model of baseline or specific detectors for studies to support the Electron-Ion Collider (EIC) project. This code has been used in a few publications and papers and parts of it are available for citation through Zenodo:
 
-- <b><a href="https://inspirehep.net/literature/1802504">Charm jets as a probe for strangeness at the future Electron-Ion Collider</a></b>. <a href="https://inspirehep.net/authors/1203346">Miguel Arratia</a> (<a href="https://inspirehep.net/institutions/903304">UC, Riverside</a> and <a href="https://inspirehep.net/institutions/904961">Jefferson Lab</a>), Yulia Furletova (<a href="https://inspirehep.net/institutions/904961">Jefferson Lab</a>), <a href="https://inspirehep.net/authors/1057163">T.J. Hobbs</a> (<a href="https://inspirehep.net/institutions/905856">Southern Methodist U.</a> and <a href="https://inspirehep.net/institutions/904961">Jefferson Lab</a>), <a href="https://inspirehep.net/authors/994916">Fredrick Olness</a> (<a href="https://inspirehep.net/institutions/905856">Southern Methodist U.</a>), Stephen J. Sekula (<a href="https://inspirehep.net/institutions/905856">Southern Methodist U.</a>). e-Print: <a href="https://arxiv.org/abs/2006.12520">2006.12520</a>[hep-ph]
-- <b><a href="https://inspirehep.net/literature/1851396">A Delphes card for the EIC yellow-report detector</a>.</b> <a href="https://inspirehep.net/authors/1203346">Miguel Arratia</a> (<a href="https://inspirehep.net/institutions/903304">UC, Riverside</a> and <a href="https://inspirehep.net/institutions/904961">Jefferson Lab</a>), <a href="https://inspirehep.net/authors/1021142">Stephen Sekula</a> (<a href="https://inspirehep.net/institutions/905856">Southern Methodist U.</a>). e-Print: <a href="https://arxiv.org/abs/2103.06886">2103.06886</a>[physics.ins-det]. DOI: <a href="https://doi.org/10.5281/zenodo.4592887">10.5281/zenodo.4592887</a>(publication)
-- <b><a href="https://inspirehep.net/literature/1851258">Science Requirements and Detector Concepts for the Electron-Ion Collider: EIC Yellow Report</a></b>. <a href="https://inspirehep.net/authors/1706729">R. Abdul Khalek</a>, <a href="https://inspirehep.net/authors/1019006">A. Accardi</a>, J. Adam, D. Adamiak, W. Akers et al. e-Print: <a href="https://arxiv.org/abs/2103.05419"> 2103.05419 </a>[physics.ins-det]
+- Charm jets as a probe for strangeness at the future Electron-Ion Collider. Miguel Arratia (UC Riverside amd Jefferson Lab), Yulia Furletova (Jefferson Lab), T. J. Hobbs (Southern Methodist U. and Jefferson Lab), Frederick Olness (Southern Methodist U.), Stephen J. Sekula (Southern Methodist U.). https://arxiv.org/abs/2006.12520 [hep-ph]
+- A Delphes card for the EIC yellow-report detector. Miguel Arratia (UC Riverside amd Jefferson Lab) and Stephen J. Sekula (Southern Methodist U.). https://arxiv.org/abs/2103.06886 [physics.ins-det].  DOI: https://doi.org/10.5281/zenodo.4592887.
+- Science Requirements and Detector Concepts for the Electron-Ion Collider: EIC Yellow Report.R. Abdul Khalek, A. Accardi, J. Adam, D. Adamiak, W. Akers et al. e-Print: https://arxiv.org/abs/2103.05419 [physics.ins-det]
 
-<p>
-<img style="float:left; width:400px;" src="https://github.com/eic/delphes_EIC/blob/master/images/EICDetector_3D_CCDIS_CharmJet.png"/>
-<img style="float:right; width:400px;" src="https://github.com/eic/delphes_EIC/raw/master/images/EICDetector_3D_CCDIS_CharmJet_DisplacedVtx.png"/>
-</p>
+
+.. image:: https://github.com/eic/delphes_EIC/blob/master/images/EICDetector_3D_CCDIS_CharmJet.png
+.. image:: https://github.com/eic/delphes_EIC/raw/master/images/EICDetector_3D_CCDIS_CharmJet_DisplacedVtx.png
 
 What's New?
 ----
@@ -61,7 +60,8 @@ The current model we recommend is ```delphes_card_allsilicon_3T.tcl```, which is
 
 We currently simulte DIS using Pythia8 within Delphes. Again, detailed instructions for patching and installing it are below. The command file (ending in `.cmnd`) shown here is suitable for DIS at EIC. 
 
-### Generating Events
+Generating Events
+----
 
 Run generation command:
 
@@ -71,7 +71,8 @@ Run generation command:
 
 You can see examples of analysis code in the Delphes page above
 
-### Visualizing Events 
+Visualizing Events 
+----
 
 Run the Delphes visualization script on your ROOT file, using the input Delphes card (TCL) file to help it structure the detector in the display:
 
