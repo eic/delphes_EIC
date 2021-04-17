@@ -64,12 +64,9 @@ We currently simulte DIS using Pythia8 within Delphes. Again, detailed instructi
 Generating Events
 ----
 
-Run generation command:
+Because of the bug fixes and improvements in PYTHIA 8.3 (vs. 8.2), we recommend using 8.3 to generate events. However, for now (Spring 2021) Delphes and PYTHIA8.3 don't compile/link together, so you cannot use PYTHIA 8.3 and use the DelphesPythia8 binary. Instead, we recommend a 2-step process where you first generate HepMC output using PYTHIA8, then read into Delphes:
 
 .. code:: bash
-   # PYTHIA8.3 and Delphes don't compile together, so we recommend a
-   # 2-step process for now.
-   # Generate HepMC output using PYTHIA8, then read into Delphes
    ./DelphesHepMC cards/delphes_card_allsilicon_3T.tcl out.root input.hepmc
 
 You can see examples of analysis code in the Delphes page above
