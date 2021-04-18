@@ -20,9 +20,6 @@ Delphes EIC
    
 .. Add main page text here
 
-====
-delphes_EIC
-====
 
 Welcome to the ``delphes_EIC`` project. This code aims to deliver a fast-simulation model of baseline or specific detectors for studies to support the Electron-Ion Collider (EIC) project. This code has been used in a few publications and papers and parts of it are available for citation through Zenodo:
 
@@ -35,21 +32,23 @@ Welcome to the ``delphes_EIC`` project. This code aims to deliver a fast-simulat
 
 .. image:: https://github.com/eic/delphes_EIC/raw/master/images/EICDetector_3D_CCDIS_CharmJet_DisplacedVtx.png
 
+====
 What's New?
-----
+====
 
 * EIC PID code has been used to create IdentificationMaps for the mRICH, barrelDIRC, and dualRICH. No more external code needed!
 
+====
 Installation Instructions
-----
+====
 
 #. Install PYTHIA8.3 following the instructions below, because code-patching is necessary to fix a bug in the DIS simulation.
 #. Install Delphes3 following: https://github.com/delphes/delphes
 
 
-
+====
 EIC Yellow-Report Detector Models
-----
+====
 
 The current model we recommend is ```delphes_card_allsilicon_3T.tcl```, which is based on detector studies from the EIC Yellow Report (https://arxiv.org/abs/2103.05419). This model incorporates all-silicon tracking, and EMCAL and HCAL. PID system responses are provided by efficiency maps based on EIC PID code (https://gitlab.com/preghenella/pid/). 
 
@@ -60,6 +59,10 @@ The current model we recommend is ```delphes_card_allsilicon_3T.tcl```, which is
 - Particle ID systems: based on the mRICH, barrel DIRC, and dual RICH concepts articulated by the EIC community; implemented using IdentificationMaps
 
 We currently simulte DIS using Pythia8 within Delphes. Again, detailed instructions for patching and installing it are below. The command file (ending in `.cmnd`) shown here is suitable for DIS at EIC. 
+
+====
+Using the project
+====
 
 Generating Events
 ----
