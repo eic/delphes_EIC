@@ -21,7 +21,7 @@ Delphes EIC
 .. Add main page text here
 
 
-Welcome to the ``delphes_EIC`` project. This code aims to deliver a fast-simulation model of baseline or specific detectors for studies to support the Electron-Ion Collider (EIC) project. This code has been used in a few publications and papers and parts of it are available for citation through Zenodo:
+Welcome to the **Delphes EIC** project. This code aims to deliver a fast-simulation model of baseline or specific detectors for studies to support the Electron-Ion Collider (EIC) project. This code has been used in a few publications and papers and parts of it are available for citation through Zenodo:
 
 - Charm jets as a probe for strangeness at the future Electron-Ion Collider. Miguel Arratia (UC Riverside amd Jefferson Lab), Yulia Furletova (Jefferson Lab), T. J. Hobbs (Southern Methodist U. and Jefferson Lab), Frederick Olness (Southern Methodist U.), Stephen J. Sekula (Southern Methodist U.). https://arxiv.org/abs/2006.12520 [hep-ph]
 - A Delphes card for the EIC yellow-report detector. Miguel Arratia (UC Riverside amd Jefferson Lab) and Stephen J. Sekula (Southern Methodist U.). https://arxiv.org/abs/2103.06886 [physics.ins-det].  DOI: https://doi.org/10.5281/zenodo.4592887.
@@ -42,7 +42,8 @@ What's New?
 Installation Instructions
 ====
 
-#. Install PYTHIA8.3 following the instructions below, because code-patching is necessary to fix a bug in the DIS simulation.
+#. OPTIONAL (but recommended): Install LHAPDF
+#. Install PYTHIA8.3 (if you installed LHAPDF, build with LHAPDF support)
 #. Install Delphes3 following: https://github.com/delphes/delphes
 
 
@@ -50,7 +51,7 @@ Installation Instructions
 EIC Yellow-Report Detector Models
 ====
 
-The current model we recommend is ```delphes_card_allsilicon_3T.tcl```, which is based on detector studies from the EIC Yellow Report (https://arxiv.org/abs/2103.05419). This model incorporates all-silicon tracking, and EMCAL and HCAL. PID system responses are provided by efficiency maps based on EIC PID code (https://gitlab.com/preghenella/pid/). 
+The current model we recommend is ```delphes_card_allsilicon_3T.tcl```. Is is based on detector studies from the EIC Yellow Report (https://arxiv.org/abs/2103.05419). This model incorporates all-silicon tracking, as well as an EMCAL and HCAL. PID system responses are provided by efficiency maps based on EIC PID code (https://gitlab.com/preghenella/pid/). 
 
 - Magnetic field: 1.5 T or 3.0 T
 - Solenoid length: 2.0 m
@@ -58,7 +59,7 @@ The current model we recommend is ```delphes_card_allsilicon_3T.tcl```, which is
 - An HCAL and and EMCAL
 - Particle ID systems: based on the mRICH, barrel DIRC, and dual RICH concepts articulated by the EIC community; implemented using IdentificationMaps
 
-We currently simulte DIS using Pythia8 within Delphes. Again, detailed instructions for patching and installing it are below. The command file (ending in `.cmnd`) shown here is suitable for DIS at EIC. 
+We currently simulate DIS using Pythia8 within Delphes. The command file (ending in `.cmnd`) shown here and available in the project is suitable for DIS at EIC. 
 
 ====
 Using the project
@@ -67,13 +68,13 @@ Using the project
 Generating Events
 ----
 
-Because of the bug fixes and improvements in PYTHIA 8.3 (vs. 8.2), we recommend using 8.3 to generate events. However, for now (Spring 2021) Delphes and PYTHIA8.3 don't compile/link together, so you cannot use PYTHIA 8.3 and use the DelphesPythia8 binary. Instead, we recommend a 2-step process where you first generate HepMC output using PYTHIA8, then read into Delphes:
+We recommend PYTHIA 8.3  for event generation, and the latest version of Delphes builds and links against 8.3 without incident, allowing for seamless generation and then detector response modeling all in one step using the ```DelphesPythia8``` binary:
 
 .. code:: bash
 
-   DelphesHepMC cards/delphes_card_allsilicon_3T.tcl out.root input.hepmc
+   DelphesPythia8 delphes_card_allsilicon_3T.tcl pythia8cards/CC_DIS.cmnd out.root
 
-You can see examples of analysis code in the Delphes page above
+For examples of other detector configurations, analysis code, etc. see the main Delphes project site. 
 
 Visualizing Events 
 ----
