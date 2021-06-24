@@ -222,7 +222,7 @@ module TrackSmearing TrackSmearing {
     (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0045)^2 +   (0.029/pt)^2   ) )  +
     (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0055)^2 +   (0.033/pt)^2   ) )  +
     (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0055)^2 +   (0.039/pt)^2   ) )  +
-    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0095)^2 +   (0.045/pt)^2   ) )
+    (abs(eta)<=4.0 && abs(eta)>2.0)   * (sqrt( (0.0095)^2 +   (0.045/pt)^2   ) )
   "
 
 
@@ -231,7 +231,7 @@ module TrackSmearing TrackSmearing {
     (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0038)^2 +   (0.037/pt)^2   ) )  +
     (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0059)^2 +   (0.056/pt)^2   ) )  +
     (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0087)^2 +   (0.108/pt)^2   ) )  +
-    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0198)^2 +   (0.207/pt)^2   ) )
+    (abs(eta)<=4.0 && abs(eta)>2.0)   * (sqrt( (0.0198)^2 +   (0.207/pt)^2   ) )
   "
 
 }
