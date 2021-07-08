@@ -11,6 +11,7 @@
 #######################################
 
 set ExecutionPath {
+  BeamSpotFilter
   ParticlePropagator
 
   ChargedHadronTrackingEfficiency
@@ -71,9 +72,23 @@ set ExecutionPath {
 # Propagate particles in cylinder
 #################################
 
+#######################
+# GenBeamSpotFilter
+# Saves a particle intended to represent the beamspot
+#######################
+
+module BeamSpotFilter BeamSpotFilter {
+    set InputArray Delphes/stableParticles
+    set OutputArray beamSpotParticle
+
+}
+
+
+
 module ParticlePropagator ParticlePropagator {
     set InputArray Delphes/stableParticles
     set OutputArray stableParticles
+    set BeamSpotInputArray BeamSpotFilter/beamSpotParticle
     set ChargedHadronOutputArray chargedHadrons
     set ElectronOutputArray electrons
     set MuonOutputArray muons
@@ -208,7 +223,7 @@ module Merger TrackMerger {
 
 module TrackSmearing TrackSmearing {
   set InputArray TrackMerger/tracks
-#  set BeamSpotInputArray BeamSpotFilter/beamSpotParticle
+  set BeamSpotInputArray BeamSpotFilter/beamSpotParticle
   set OutputArray tracks
 #  set ApplyToPileUp true
   # magnetic field
@@ -639,9 +654,6 @@ module FastJetFinder FastJetFinder {
   set R0SoftDrop 0.8
 
   set JetPTMin 3.0}
-
-
-
 
 
 ##################
@@ -8377,6 +8389,7 @@ module IdentificationMap dualRICH_c2f6 {
 module TreeWriter TreeWriter {
 # add Branch InputArray BranchName BranchClass
   add Branch Delphes/allParticles Particle GenParticle
+  add Branch BeamSpotFilter/beamSpotParticle BeamSpot GenParticle
 
   add Branch TrackSmearing/tracks Track Track
   add Branch Calorimeter/towers Tower Tower
