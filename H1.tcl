@@ -8,7 +8,7 @@ set ExecutionPath {
   ChargedHadronMomentumSmearing
   ElectronMomentumSmearing
   TrackMerger
-  TrackSmearing
+  
 
   ECal
   HCal
@@ -122,22 +122,21 @@ module Merger TrackMerger {
 # Track impact parameter smearing                                                                          
 ################################                                                                           
 
+#module TrackSmearing TrackSmearing {
 
-module TrackSmearing TrackSmearing {
-
- set InputArray TrackMerger/tracks
+# set InputArray TrackMerger/tracks
 #  set BeamSpotInputArray BeamSpotFilter/beamSpotParticle                                                  
-  set OutputArray tracks
+#  set OutputArray tracks
 #  set ApplyToPileUp true                                                                                  
   # magnetic field                                                                                         
-  set Bz 1.16
-  set PResolutionFormula { 0.0 }
-  set CtgThetaResolutionFormula { 0.0 }
-  set PhiResolutionFormula { 0.0 }
-  set D0ResolutionFormula "0.02"
-  set DZResolutionFormula "0.02 "
+#  set Bz 1.16
+#  set PResolutionFormula { 0.0 }
+#  set CtgThetaResolutionFormula { 0.0 }
+#  set PhiResolutionFormula { 0.0 }
+#  set D0ResolutionFormula "0.02"
+#  set DZResolutionFormula "0.02 "
 
-}
+#}
 
 
 
@@ -147,7 +146,7 @@ module TrackSmearing TrackSmearing {
 
 module SimpleCalorimeter ECal {
   set ParticleInputArray ParticlePropagator/stableParticles
-  set TrackInputArray TrackSmearing/tracks
+  set TrackInputArray TrackMerger/tracks
 
   set TowerOutputArray ecalTowers
   set EFlowTrackOutputArray eflowTracks
@@ -556,7 +555,7 @@ module TreeWriter TreeWriter {
 # add Branch InputArray BranchName BranchClass                                                            
   add Branch Delphes/allParticles Particle GenParticle
 
-  add Branch TrackSmearing/tracks Track Track
+  add Branch TrackMerger/tracks Track Track
   add Branch Calorimeter/towers Tower Tower
 
   add Branch HCal/eflowTracks EFlowTrack Track
