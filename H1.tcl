@@ -32,7 +32,8 @@ set ExecutionPath {
   FastJetFinder
 
   JetEnergyScale
-
+  ElectronEnergyScale
+    
   JetFlavorAssociation
   GenJetFlavorAssociation
 
@@ -215,7 +216,7 @@ module SimpleCalorimeter ECal {
   add EnergyFraction {310} {0.3}
   add EnergyFraction {3122} {0.3}
 
-   set ResolutionFormula { (eta <= 3.3 && eta>-3.3) * sqrt(energy^2*0.01^2 + energy*0.11^2 )
+   set ResolutionFormula { (eta <= 3.3 && eta>-3.3) * sqrt(energy^2*0.025^2 + energy*0.11^2 )
    }
 
 
@@ -512,6 +513,14 @@ module EnergyScale JetEnergyScale {
   # scale formula for jets (do not apply it)                                                               
   set ScaleFormula {1.0}
 }
+
+module EnergyScale ElectronEnergyScale {
+  set InputArray ElectronIsolation/electrons
+  set OutputArray electrons
+  set ScaleFormula {0.095}
+}
+
+
 ########################                                                                                   
 # Jet Flavor Association                                                                                   
 ########################                                                                                   
@@ -548,7 +557,7 @@ module UniqueObjectFinder UniqueObjectFinder {
 # earlier arrays take precedence over later ones                                                           
 # add InputArray InputArray OutputArray                                                                    
   add InputArray PhotonIsolation/photons photons
-  add InputArray ElectronIsolation/electrons electrons
+  add InputArray ElectronEnergyScale/electrons electrons
   add InputArray JetEnergyScale/jets jets
 }
 module TreeWriter TreeWriter {
