@@ -517,7 +517,7 @@ module EnergyScale JetEnergyScale {
 module EnergyScale ElectronEnergyScale {
   set InputArray ElectronIsolation/electrons
   set OutputArray electrons
-  set ScaleFormula {0.095}
+  set ScaleFormula {0.995}
 }
 
 
