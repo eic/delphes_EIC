@@ -68,8 +68,7 @@ set CommonTrackingEfficiency {
 }
 
 set CommonTrackingResolution {
-    (abs(eta)<=2.0)                 * (sqrt( (1.5e-2)^2 + (pt*cosh(eta)*2e-3)^2  ) )
-
+    (abs(eta)<=2.0)                 * (sqrt( (3.5e-2)^2 + (pt*cosh(eta)*2e-3)^2  ) )
 }
 
 module Efficiency ChargedHadronTrackingEfficiency {
@@ -216,9 +215,11 @@ module SimpleCalorimeter ECal {
   add EnergyFraction {310} {0.3}
   add EnergyFraction {3122} {0.3}
 
-   set ResolutionFormula { (eta <= 3.3 && eta>-3.3) * sqrt(energy^2*0.025^2 + energy*0.11^2 )
+#-- From NIM 386 (1997) 310-347 with the constant term inflated some.
+   set ResolutionFormula {
+       ( eta> -1.46 && eta < 3.35 )  * sqrt(energy^2*0.025^2 + energy*0.11^2 )
+     + ( eta> -3.35 && eta < -1.46 ) * sqrt(energy^2*0.030^2 + energy*0.10^2 )
    }
-
 
 }
 
@@ -291,10 +292,16 @@ module SimpleCalorimeter HCal {
   add EnergyFraction {3122} {0.7}
 
   # set HCalResolutionFormula {resolution formula as a function of eta and energy}                         
-  set ResolutionFormula {    (eta <= 3.3 && eta>-3.3)   * sqrt(energy^2*0.03^2 + energy*0.50^2)
+
+#-- From NIM 386 (1997) 310-347.
+# set ResolutionFormula {
+#      ( eta> -1.46 && eta < 3.35 )  * sqrt(energy^2*0.20^2 + energy*0.50^2)
+# }
+
+#-- Adjustments from looking at detector figure to give more realistic coverage
+  set ResolutionFormula {
+       ( eta> -0.76 && eta < 3.35 )  * sqrt(energy^2*0.20^2 + energy*0.50^2)
   }
-
-
 }
 
 #################                                                                                          
