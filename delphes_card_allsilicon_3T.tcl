@@ -18,12 +18,11 @@ set ExecutionPath {
   ElectronTrackingEfficiency
   MuonTrackingEfficiency
 
-  ChargedHadronMomentumSmearing
-  ElectronMomentumSmearing
-  MuonMomentumSmearing
+  ChargedHadronSmearing
+  ElectronSmearing
+  MuonSmearing
 
   TrackMerger
-  TrackSmearing
 
   ECal
   HCal
@@ -173,62 +172,102 @@ module Efficiency MuonTrackingEfficiency {
 }
 
 ########################################
-# Momentum resolution for charged tracks
+# Smearing for charged hadrons
 ########################################
 
-module MomentumSmearing ChargedHadronMomentumSmearing {
+module TrackSmearing ChargedHadronSmearing {
   set InputArray ChargedHadronTrackingEfficiency/chargedHadrons
-  set OutputArray chargedHadrons
-  set ResolutionFormula  $CommonTrackingResolution
-}
-
-###################################
-# Momentum resolution for muons
-###################################
-
-module MomentumSmearing MuonMomentumSmearing {
-  set InputArray MuonTrackingEfficiency/muons
-  set OutputArray muons
-  set ResolutionFormula $CommonTrackingResolution
-}
-
-
-
-###################################
-# Momentum resolution for electrons
-###################################
-module MomentumSmearing ElectronMomentumSmearing {
-  set InputArray ElectronTrackingEfficiency/electrons
-  set OutputArray electrons
-  set ResolutionFormula $CommonTrackingResolution
-}
-
-
-##############
-# Track merger
-##############
-
-module Merger TrackMerger {
-# add InputArray InputArray
-  add InputArray ChargedHadronMomentumSmearing/chargedHadrons
-  add InputArray ElectronMomentumSmearing/electrons
-  add InputArray MuonMomentumSmearing/muons
-  set OutputArray tracks
-}
-
-################################
-# Track impact parameter smearing
-################################
-
-
-module TrackSmearing TrackSmearing {
-  set InputArray TrackMerger/tracks
   set BeamSpotInputArray BeamSpotFilter/beamSpotParticle
-  set OutputArray tracks
+  set OutputArray chargedHadrons
 #  set ApplyToPileUp true
   # magnetic field
   set Bz 3.0
-  set PResolutionFormula { 0.0 }
+  set PResolutionFormula $CommonTrackingResolution
+  set CtgThetaResolutionFormula { 0.0 }
+  set PhiResolutionFormula { 0.0 }
+
+# Updated Berkeley all-silicon tracker for 3.0T field. Provided by Rey Cruz-Torres on 6/29/2021
+  set D0ResolutionFormula "
+    (abs(eta)<=0.5)                   * (sqrt( (0.0045)^2 +   (0.028/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0044)^2 +   (0.036/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0061)^2 +   (0.062/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0086)^2 +   (0.108/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0092)^2 +   (0.222/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=3.0 && abs(eta)>2.5)   * (sqrt( (0.0093)^2 +   (0.423/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=3.5 && abs(eta)>3.0)   * (sqrt( (0.0310)^2 +   (0.831/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=4.0 && abs(eta)>3.5)   * (sqrt( (0.0810)^2 +   (1.434/(pt*cosh(eta)))^2   ) )
+  "
+
+
+  set DZResolutionFormula "
+    (abs(eta)<=0.5)                   * (sqrt( (0.0033)^2 +   (0.027/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0044)^2 +   (0.043/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0071)^2 +   (0.099/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0130)^2 +   (0.290/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0300)^2 +   (0.923/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=3.0 && abs(eta)>2.5)   * (sqrt( (0.0330)^2 +   (2.581/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=3.5 && abs(eta)>3.0)   * (sqrt( (0.1890)^2 +   (8.349/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=4.0 && abs(eta)>3.5)   * (sqrt( (0.0011)^2 +   (21.430/(pt*cosh(eta)))^2   ) )
+  "
+
+
+}
+
+###################################
+# Smearing for muons
+###################################
+
+module TrackSmearing MuonSmearing {
+  set InputArray MuonTrackingEfficiency/muons
+  set BeamSpotInputArray BeamSpotFilter/beamSpotParticle
+  set OutputArray muons
+#  set ApplyToPileUp true
+  # magnetic field
+  set Bz 3.0
+  set PResolutionFormula $CommonTrackingResolution
+  set CtgThetaResolutionFormula { 0.0 }
+  set PhiResolutionFormula { 0.0 }
+
+# Updated Berkeley all-silicon tracker for 3.0T field. Provided by Rey Cruz-Torres on 6/29/2021
+  set D0ResolutionFormula "
+    (abs(eta)<=0.5)                   * (sqrt( (0.0045)^2 +   (0.028/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0044)^2 +   (0.036/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0061)^2 +   (0.062/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0086)^2 +   (0.108/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0092)^2 +   (0.222/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=3.0 && abs(eta)>2.5)   * (sqrt( (0.0093)^2 +   (0.423/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=3.5 && abs(eta)>3.0)   * (sqrt( (0.0310)^2 +   (0.831/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=4.0 && abs(eta)>3.5)   * (sqrt( (0.0810)^2 +   (1.434/(pt*cosh(eta)))^2   ) )
+  "
+
+
+  set DZResolutionFormula "
+    (abs(eta)<=0.5)                   * (sqrt( (0.0033)^2 +   (0.027/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0044)^2 +   (0.043/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0071)^2 +   (0.099/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0130)^2 +   (0.290/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0300)^2 +   (0.923/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=3.0 && abs(eta)>2.5)   * (sqrt( (0.0330)^2 +   (2.581/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=3.5 && abs(eta)>3.0)   * (sqrt( (0.1890)^2 +   (8.349/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=4.0 && abs(eta)>3.5)   * (sqrt( (0.0011)^2 +   (21.430/(pt*cosh(eta)))^2   ) )
+  "
+
+
+}
+
+###################################
+# Smearing for electrons
+###################################
+
+
+module TrackSmearing ElectronSmearing {
+  set InputArray ElectronTrackingEfficiency/electrons
+  set BeamSpotInputArray BeamSpotFilter/beamSpotParticle
+  set OutputArray electrons
+#  set ApplyToPileUp true
+  # magnetic field
+  set Bz 3.0
+  set PResolutionFormula $CommonTrackingResolution
   set CtgThetaResolutionFormula { 0.0 }
   set PhiResolutionFormula { 0.0 }
 
@@ -260,13 +299,26 @@ module TrackSmearing TrackSmearing {
 }
 
 
+##############
+# Track merger
+##############
+
+module Merger TrackMerger {
+# add InputArray InputArray
+  add InputArray ChargedHadronSmearing/chargedHadrons
+  add InputArray ElectronSmearing/electrons
+  add InputArray MuonSmearing/muons
+  set OutputArray tracks
+}
+
+
 #############
 #   ECAL
 #############
 
 module SimpleCalorimeter ECal {
   set ParticleInputArray ParticlePropagator/stableParticles
-  set TrackInputArray TrackSmearing/tracks
+  set TrackInputArray TrackMerger/tracks
 
   set TowerOutputArray ecalTowers
   set EFlowTrackOutputArray eflowTracks
@@ -753,7 +805,7 @@ module TrackCountingBTagging TrackCountingBTagging {
 #    Assumed track resolution = 0.00175 mrad
 
 module IdentificationMap mRICH {
-  set InputArray TrackSmearing/tracks
+  set InputArray TrackMerger/tracks
   set OutputArray tracks
 
    #--- kaons ---
@@ -881,7 +933,7 @@ module IdentificationMap mRICH {
 #    Assumed quantum efficiency of the MCP-PMT = 27%
 
 module IdentificationMap barrelDIRC {
-  set InputArray TrackSmearing/tracks
+  set InputArray TrackMerger/tracks
   set OutputArray tracks
 
   # --- kaons ---
@@ -3891,7 +3943,7 @@ module IdentificationMap barrelDIRC {
 #               Z =  250
 
 module IdentificationMap dualRICH_aerogel {
-  set InputArray TrackSmearing/tracks
+  set InputArray TrackMerger/tracks
   set OutputArray tracks
 
   # --- kaons ---
@@ -7653,7 +7705,7 @@ module IdentificationMap dualRICH_aerogel {
 #               Z =  250
 
 module IdentificationMap dualRICH_c2f6 {
-  set InputArray TrackSmearing/tracks
+  set InputArray TrackMerger/tracks
   set OutputArray tracks
 
   # --- kaons ---
@@ -8391,7 +8443,7 @@ module TreeWriter TreeWriter {
   add Branch Delphes/allParticles Particle GenParticle
   add Branch BeamSpotFilter/beamSpotParticle BeamSpot GenParticle
 
-  add Branch TrackSmearing/tracks Track Track
+  add Branch TrackMerger/tracks Track Track
   add Branch Calorimeter/towers Tower Tower
 
   add Branch HCal/eflowTracks EFlowTrack Track

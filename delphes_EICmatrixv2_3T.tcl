@@ -1,8 +1,8 @@
-######################################################################################################################                                
-# EIC detector model                                                                                                                                                                                     
-# based on parameters from EIC detector matrix from EIC yellow report https://physdiv.jlab.org/DetectorMatrix/ (also in https://arxiv.org/abs/2103.05419). 
+######################################################################################################################
+# EIC detector model
+# based on parameters from EIC detector matrix from EIC yellow report https://physdiv.jlab.org/DetectorMatrix/ (also in https://arxiv.org/abs/2103.05419).
 # as well as on assumptions on calorimeter granularity, and efficiency.
-# email: miguel.arratia@ucr.edu, ssekula@smu.edu 
+# email: miguel.arratia@ucr.edu, ssekula@smu.edu
 #######################################################################################################################
 
 
@@ -23,21 +23,19 @@ set ExecutionPath {
   ChargedHadronTrackingEfficiency
   ElectronTrackingEfficiency
 
- 
-  ChargedHadronMomentumSmearing
-  ElectronMomentumSmearing
-  
+
+  ChargedHadronSmearing
+  ElectronSmearing
 
   TrackMerger
-  TrackSmearing
 
   ECal
   HCal
- 
+
   Calorimeter
   EFlowMerger
   EFlowFilter
-  
+
   PhotonEfficiency
   PhotonIsolation
 
@@ -51,7 +49,7 @@ set ExecutionPath {
   NeutrinoFilter
   GenJetFinder
   GenMissingET
-  
+
   FastJetFinder
 
   JetEnergyScale
@@ -79,7 +77,7 @@ module ParticlePropagator ParticlePropagator {
     set OutputArray stableParticles
     set ChargedHadronOutputArray chargedHadrons
     set ElectronOutputArray electrons
-   
+
     # radius of the magnetic field coverage, in m
     set Radius 1.5
     # half-length of the magnetic field coverage, in m
@@ -110,7 +108,7 @@ set CommonTrackingEfficiency {
     (abs(eta) > 2.0 && abs(eta) <= 2.5) * (pt > 0.220)   * (1.0) +
     (abs(eta) > 2.5 && abs(eta) <= 3.5) * (pt > 0.150)   * (1.0) +
     (abs(eta) > 3.5)                                                  * (0.00)+
-    0.0    
+    0.0
 }
 
 set CommonTrackingResolution {
@@ -145,26 +143,89 @@ module Efficiency ElectronTrackingEfficiency {
 
 
 ########################################
-# Momentum resolution for charged tracks
+# Smearing for charged hadrons
 ########################################
 
-module MomentumSmearing ChargedHadronMomentumSmearing {
+module TrackSmearing ChargedHadronSmearing {
   set InputArray ChargedHadronTrackingEfficiency/chargedHadrons
+  set BeamSpotInputArray BeamSpotFilter/beamSpotParticle
   set OutputArray chargedHadrons
-  set ResolutionFormula  $CommonTrackingResolution
+#  set ApplyToPileUp true
+  # magnetic field
+  set Bz 3.0
+  set PResolutionFormula $CommonTrackingResolution
+  set CtgThetaResolutionFormula { 0.0 }
+  set PhiResolutionFormula { 0.0 }
+
+# Updated Berkeley all-silicon tracker for 3.0T field. Provided by Rey Cruz-Torres on 6/29/2021
+  set D0ResolutionFormula "
+    (abs(eta)<=0.5)                   * (sqrt( (0.0045)^2 +   (0.028/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0044)^2 +   (0.036/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0061)^2 +   (0.062/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0086)^2 +   (0.108/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0092)^2 +   (0.222/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=3.0 && abs(eta)>2.5)   * (sqrt( (0.0093)^2 +   (0.423/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=3.5 && abs(eta)>3.0)   * (sqrt( (0.0310)^2 +   (0.831/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=4.0 && abs(eta)>3.5)   * (sqrt( (0.0810)^2 +   (1.434/(pt*cosh(eta)))^2   ) )
+  "
+
+
+  set DZResolutionFormula "
+    (abs(eta)<=0.5)                   * (sqrt( (0.0033)^2 +   (0.027/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0044)^2 +   (0.043/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0071)^2 +   (0.099/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0130)^2 +   (0.290/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0300)^2 +   (0.923/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=3.0 && abs(eta)>2.5)   * (sqrt( (0.0330)^2 +   (2.581/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=3.5 && abs(eta)>3.0)   * (sqrt( (0.1890)^2 +   (8.349/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=4.0 && abs(eta)>3.5)   * (sqrt( (0.0011)^2 +   (21.430/(pt*cosh(eta)))^2   ) )
+  "
+
+
 }
 
+###################################
+# Smearing for electrons
+###################################
 
 
-###################################
-# Momentum resolution for electrons
-###################################
-module MomentumSmearing ElectronMomentumSmearing {
+module TrackSmearing ElectronSmearing {
   set InputArray ElectronTrackingEfficiency/electrons
+  set BeamSpotInputArray BeamSpotFilter/beamSpotParticle
   set OutputArray electrons
-  set ResolutionFormula $CommonTrackingResolution 
-}
+#  set ApplyToPileUp true
+  # magnetic field
+  set Bz 3.0
+  set PResolutionFormula $CommonTrackingResolution
+  set CtgThetaResolutionFormula { 0.0 }
+  set PhiResolutionFormula { 0.0 }
 
+# Updated Berkeley all-silicon tracker for 3.0T field. Provided by Rey Cruz-Torres on 6/29/2021
+  set D0ResolutionFormula "
+    (abs(eta)<=0.5)                   * (sqrt( (0.0045)^2 +   (0.028/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0044)^2 +   (0.036/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0061)^2 +   (0.062/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0086)^2 +   (0.108/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0092)^2 +   (0.222/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=3.0 && abs(eta)>2.5)   * (sqrt( (0.0093)^2 +   (0.423/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=3.5 && abs(eta)>3.0)   * (sqrt( (0.0310)^2 +   (0.831/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=4.0 && abs(eta)>3.5)   * (sqrt( (0.0810)^2 +   (1.434/(pt*cosh(eta)))^2   ) )
+  "
+
+
+  set DZResolutionFormula "
+    (abs(eta)<=0.5)                   * (sqrt( (0.0033)^2 +   (0.027/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0044)^2 +   (0.043/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0071)^2 +   (0.099/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0130)^2 +   (0.290/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0300)^2 +   (0.923/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=3.0 && abs(eta)>2.5)   * (sqrt( (0.0330)^2 +   (2.581/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=3.5 && abs(eta)>3.0)   * (sqrt( (0.1890)^2 +   (8.349/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=4.0 && abs(eta)>3.5)   * (sqrt( (0.0011)^2 +   (21.430/(pt*cosh(eta)))^2   ) )
+  "
+
+
+}
 
 ##############
 # Track merger
@@ -172,32 +233,9 @@ module MomentumSmearing ElectronMomentumSmearing {
 
 module Merger TrackMerger {
 # add InputArray InputArray
-  add InputArray ChargedHadronMomentumSmearing/chargedHadrons
-  add InputArray ElectronMomentumSmearing/electrons
-  
+  add InputArray ChargedHadronSmearing/chargedHadrons
+  add InputArray ElectronSmearing/electrons
   set OutputArray tracks
-}
-
-################################                                                                    
-# Track impact parameter smearing                                                                   
-################################                                                                    
-
-
-module TrackSmearing TrackSmearing {
-  set InputArray TrackMerger/tracks
-#  set BeamSpotInputArray BeamSpotFilter/beamSpotParticle
-  set OutputArray tracks
-#  set ApplyToPileUp true
-  # magnetic field
-  set Bz 3.0
-  set PResolutionFormula { 0.0 }
-  set CtgThetaResolutionFormula { 0.0 }
-  set PhiResolutionFormula { 0.0 }
-  set D0ResolutionFormula "( abs(eta) <= 2.5 && abs(eta)>1.0 ) * (sqrt( (0.010)^2 + (0.040/pt)^2)) +
-                             ( abs(eta) <= 1.0 ) *                 (sqrt( (0.005)^2 + (0.030/pt)^2))"
-  set DZResolutionFormula "( abs(eta) <= 2.5 && abs(eta)>1.0 ) *   (sqrt( (0.020)^2 + (0.100/pt)^2)) + 
-                             ( abs(eta) <= 1.0 )               *   (sqrt( (0.005)^2 + (0.030/pt)^2)) "
-    
 }
 
 
@@ -207,7 +245,7 @@ module TrackSmearing TrackSmearing {
 
 module SimpleCalorimeter ECal {
   set ParticleInputArray ParticlePropagator/stableParticles
-  set TrackInputArray TrackSmearing/tracks
+  set TrackInputArray TrackMerger/tracks
 
   set TowerOutputArray ecalTowers
   set EFlowTrackOutputArray eflowTracks
@@ -215,9 +253,9 @@ module SimpleCalorimeter ECal {
 
   set IsEcal true
   set EnergyMin 0.050
-  #does not seem possible to set minimum dependent on eta as spec in the YR.  
-  
-		  
+  #does not seem possible to set minimum dependent on eta as spec in the YR.
+
+
   set EnergySignificanceMin 1.0
 
   set SmearTowerCenter true
@@ -228,10 +266,10 @@ module SimpleCalorimeter ECal {
   # each list starts with the lower edge of the first tower
   # the list ends with the higher edged of the last tower
 
-  # Granularity is not discussed in EIC detector handbook. 
+  # Granularity is not discussed in EIC detector handbook.
   ##BARREL
   #assume 0.1 x 0.1 (real cell size will be smaller, so this is to represent some cluster)
-    
+
     set PhiBins {}
     for {set i -30} {$i <=30} {incr i} {
 	add PhiBins [expr {$i * $pi/30.0}]
@@ -256,7 +294,7 @@ module SimpleCalorimeter ECal {
 	set eta [expr {0.9 + $i*0.1 }]
 	add EtaPhiBins $eta $PhiBins
     }
- 
+
 
   add EnergyFraction {0} {0.0}
   # energy fractions for e, gamma and pi0
@@ -281,7 +319,7 @@ module SimpleCalorimeter ECal {
                  		   (eta <= -1.0 && eta>-2.0 )                         * sqrt(energy^2*0.02^2 + energy*0.08^2 + 0.02^2 )+ \
 				   (eta <= 1.0  && eta> -1.0 )                        * sqrt(energy^2*0.03^2 + energy*0.14^2 + 0.02^2 )+ \
 				   (eta <= 3.5  &&  eta>1.0 )                         * sqrt(energy^2*0.02^2 + energy*0.12^2 + 0.02^2)}
-    
+
 }
 
 
@@ -299,7 +337,7 @@ module SimpleCalorimeter HCal {
 
   set IsEcal false
 
-  ##Assumes noise 100 MeV per tower. 
+  ##Assumes noise 100 MeV per tower.
   set EnergyMin 0.5
   set EnergySignificanceMin 1.0
 
@@ -315,7 +353,7 @@ module SimpleCalorimeter HCal {
 	set eta [expr {$i * 0.1}]
 	add EtaPhiBins $eta $PhiBins
     }
-    
+
     for {set i -30} {$i <=30} {incr i} {
 	add PhiBins [expr {$i * $pi/30.0}]
     }
@@ -354,7 +392,7 @@ module SimpleCalorimeter HCal {
                              (eta <= 1.0 && eta>-1.0 )                       * sqrt(energy^2*0.10^2 + energy*1.00^2)+
                              (eta <= 3.5 && eta>1.0 )                       * sqrt(energy^2*0.10^2 + energy*0.50^2)
   }
-    
+
 }
 
 
@@ -377,7 +415,7 @@ module PdgCodeFilter ElectronFilter {
 module PdgCodeFilter ChargedHadronFilter {
   set InputArray HCal/eflowTracks
   set OutputArray chargedHadrons
-  
+
   add PdgCode {11}
   add PdgCode {-11}
   add PdgCode {13}
@@ -417,7 +455,7 @@ module Merger EFlowMerger {
 module PdgCodeFilter EFlowFilter {
   set InputArray EFlowMerger/eflow
   set OutputArray eflow
-  
+
   add PdgCode {11}
   add PdgCode {-11}
   add PdgCode {13}
@@ -436,7 +474,7 @@ module Efficiency PhotonEfficiency {
   # set EfficiencyFormula {efficiency formula as a function of eta and pt}
 
   # efficiency formula for photons
-    set EfficiencyFormula { 1} 
+    set EfficiencyFormula { 1}
 }
 
 ##################
@@ -609,7 +647,7 @@ module EnergyScale JetEnergyScale {
   set OutputArray jets
 
   # scale formula for jets (do not apply it)
-  set ScaleFormula {1.0} 
+  set ScaleFormula {1.0}
 }
 
 ########################
@@ -678,7 +716,7 @@ module TrackCountingBTagging TrackCountingBTagging {
     #  set Use3D false
     # minimum number of tracks (high efficiency n=2, high purity n=3)
     #set Ntracks 3
-    
+
 }
 
 ##################
@@ -686,12 +724,12 @@ module TrackCountingBTagging TrackCountingBTagging {
 ##################
 
 # These maps are built from the table in section 8.6 of the EIC Yellow Report.
-# When the table says that two species are separated by "3 sigma" we assume the 
+# When the table says that two species are separated by "3 sigma" we assume the
 # following:
 #
 # 1. Each specie is Gaussian distributed in a variable x each with the same Gaussian width, s.
 # 2. The separation is defined by S. For 3 sigma, S=3.
-# 3. The separation takes into account the two widths of the individual Gaussians, S = sqrt(s^2 + s^2). 
+# 3. The separation takes into account the two widths of the individual Gaussians, S = sqrt(s^2 + s^2).
 #    Thus, s = S/sqrt(2) for each of the presumed Gaussians for each specie.
 # 4. To compute the identification efficiency, the probability that specie A is idenfied as A, one
 #    uses the integral of the Gaussian within width s, e.g. p = 1 - ROOT::Math::gaussian_pdf(s) in ROOT.
@@ -700,32 +738,32 @@ module TrackCountingBTagging TrackCountingBTagging {
 # EXAMPLE:
 #
 # Electrons need to be separable from pions at the level of 3 sigma for 1.0 <= eta <= 3.5. Thus S = 3.
-# That means s = 3/sqrt(2) = 2.121. Thus p(e->e) = 1 - ROOT::Math::gaussian_pdf(2.121) = 0.958. 
+# That means s = 3/sqrt(2) = 2.121. Thus p(e->e) = 1 - ROOT::Math::gaussian_pdf(2.121) = 0.958.
 # Conversely, p(pi -> e) = 1 - ROOT::Math::normal_cdf(2.121) = 0.017. Once can also compute from this
 # p(e->pi) = 1 - ROOT::Math::normal_cdf(2.121) (assuming a 2-species model for PID) and p(pi->pi) = 0.958 (integral of gaussian within s)
 #
 
-module IdentificationMap PIDSystems { 
-    set InputArray HCal/eflowTracks 
-    set OutputArray tracks 
-    
-    
+module IdentificationMap PIDSystems {
+    set InputArray HCal/eflowTracks
+    set OutputArray tracks
+
+
     # Electron/Pion identification, treated as a 2-species problem
     add EfficiencyFormula {-11} {-11} { (abs(eta) > 3.5 || pt * cosh(eta) < 0.050) * (0.00) +
 	(abs(eta) <= 3.5 && pt * cosh(eta) >= 0.050) * (
 							(-3.5 <= eta && eta < 1.0) * (1.00) +
 							(1.0 <= eta && eta <= 3.5) * (0.95795179)) }
-    
+
     add EfficiencyFormula {211} {-11} { (abs(eta) > 3.5 || pt * cosh(eta) < 0.050) * (0.00) +
 	(abs(eta) <= 3.5 && pt * cosh(eta) >= 0.050) * (
 							(-3.5 <= eta && eta < 1.0) * (1e-4) +
 							(1.0 <= eta && eta <= 3.5) * (0.016947427)) }
-    
+
     add EfficiencyFormula {-11} {211} { (abs(eta) > 3.5 || pt * cosh(eta) < 0.050) * (1.00) +
 	(abs(eta) <= 3.5 && pt * cosh(eta) >= 0.050) * (
 							(-3.5 <= eta && eta < 1.0) * (0.00) +
 							(1.0 <= eta && eta <= 3.5) * (0.016947427)) }
-    
+
     add EfficiencyFormula {211} {211} { (abs(eta) > 3.5 || pt * cosh(eta) < 0.050) * (1.00) +
 	(abs(eta) <= 3.5 && pt * cosh(eta) >= 0.050) * (
 							(-3.5 <= eta && eta < 1.0) * (0.99990000) +
@@ -762,7 +800,7 @@ module IdentificationMap PIDSystems {
 							(1.5 <= eta && eta < 2.5 && pt * cosh(eta) <= 50) * (0.016947427) +
 							(2.5 <= eta && eta <= 3.5 && pt * cosh(eta) <= 45) * (0.016947427)) }
 
-    
+
     add EfficiencyFormula {-211} {321} { (abs(eta) > 3.5 || pt * cosh(eta) < 0.100) * (0.00) +
 	(abs(eta) <= 3.5 && pt * cosh(eta) >= 0.100) * (
 							(eta < -1.0 && pt * cosh(eta) <= 7) * (0.016947427) +
@@ -789,7 +827,7 @@ module IdentificationMap PIDSystems {
 							(1.0 <= eta && eta < 1.5 && pt * cosh(eta) <= 30) * (0.95795179) +
 							(1.5 <= eta && eta < 2.5 && pt * cosh(eta) <= 50) * (0.95795179) +
 							(2.5 <= eta && eta <= 3.5 && pt * cosh(eta) <= 45) * (0.95795179)) }
-    
+
 
     add EfficiencyFormula {2212} {2212} { (abs(eta) > 3.5 || pt * cosh(eta) < 0.100) * (1.00) +
 	(abs(eta) <= 3.5 && pt * cosh(eta) >= 0.100) * (
@@ -837,7 +875,7 @@ module TreeWriter TreeWriter {
 # add Branch InputArray BranchName BranchClass
   add Branch Delphes/allParticles Particle GenParticle
 
-  add Branch TrackSmearing/tracks Track Track
+  add Branch TrackMerger/tracks Track Track
   add Branch Calorimeter/towers Tower Tower
 
   add Branch HCal/eflowTracks EFlowTrack Track
@@ -848,13 +886,11 @@ module TreeWriter TreeWriter {
 
   add Branch GenJetFinder/jets GenJet Jet
   add Branch GenMissingET/momentum GenMissingET MissingET
- 
+
   add Branch UniqueObjectFinder/jets Jet Jet
   add Branch UniqueObjectFinder/electrons Electron Electron
   add Branch UniqueObjectFinder/photons Photon Photon
-  
+
   add Branch MissingET/momentum MissingET MissingET
   add Branch ScalarHT/energy ScalarHT ScalarHT
 }
-
-
