@@ -68,13 +68,8 @@ set CommonTrackingEfficiency {
 }
 
 set CommonTrackingResolution {
-
-set CommonTrackingResolution {
-    (abs(eta)<=0.8)  * (sqrt( (2.0e-2)^2 + (pt*cosh(eta)*5e-3)^\
-2  ) ) +
-    (abs(eta)>0.8 && abs(eta)<1.5)  * (sqrt( (10.0e-2)^2 + (pt*cosh(eta)*1e-2)^\
-2  ) )
-
+    (abs(eta)<=1.0)  * (sqrt( (2.0e-2)^2 + (pt*cosh(eta)*5e-3)^2  ) ) +
+    (abs(eta)>1.0 && abs(eta)<2.0)  * (sqrt( (10.0e-2)^2 + (pt*cosh(eta)*1e-2)^2  ) )
 }
 
 
