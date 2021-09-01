@@ -827,7 +827,7 @@ module IdentificationMap mRICH {
       (-3.50 <= eta && eta < -1.00) * (9.70 <= pt * cosh(eta) && pt * cosh(eta) < 10.20) * (0.754789) +
       (-3.50 <= eta && eta < -1.00) * (10.20 <= pt * cosh(eta) && pt * cosh(eta) < 50.00) * (0.000000)}
 
-    add EfficiencyFormula {321} {-211} {
+    add EfficiencyFormula {321} {211} {
       (eta<-3.50 || eta>=-1.00 || pt * cosh(eta) < 0.10 || pt * cosh(eta) >= 50.00) * ( 0.00 ) +
       (-3.50 <= eta && eta < -1.00) * (0.10 <= pt * cosh(eta) && pt * cosh(eta) < 6.60) * (0.000713) +
       (-3.50 <= eta && eta < -1.00) * (6.60 <= pt * cosh(eta) && pt * cosh(eta) < 7.30) * (0.021562) +
@@ -870,7 +870,7 @@ module IdentificationMap mRICH {
       (-3.50 <= eta && eta < -1.00) * (10.00 <= pt * cosh(eta) && pt * cosh(eta) < 10.20) * (0.169280) +
       (-3.50 <= eta && eta < -1.00) * (10.20 <= pt * cosh(eta) && pt * cosh(eta) < 50.00) * (0.000000) }
 
-    add EfficiencyFormula {-211} {-211} {
+    add EfficiencyFormula {-211} {211} {
       (eta<-3.50 || eta>=-1.00 || pt * cosh(eta) < 0.10 || pt * cosh(eta) >= 50.00) * ( 0.00 ) +
       (-3.50 <= eta && eta < -1.00) * (0.10 <= pt * cosh(eta) && pt * cosh(eta) < 3.10) * (0.000000) +
       (-3.50 <= eta && eta < -1.00) * (3.10 <= pt * cosh(eta) && pt * cosh(eta) < 6.10) * (0.998780) +
@@ -1314,7 +1314,7 @@ module IdentificationMap barrelDIRC {
     (0.90 <= eta && eta < 1.00) * (16.20 <= pt * cosh(eta) && pt * cosh(eta) < 50.00) * (0.603898) +
     (1.00 <= eta && eta < 1.10) * (0.10 <= pt * cosh(eta) && pt * cosh(eta) < 50.00) * (0.000000) }
 
-  add EfficiencyFormula {321} {-211} {
+  add EfficiencyFormula {321} {211} {
     (eta<-1.00 || eta>=1.00 || pt * cosh(eta) < 0.10 || pt * cosh(eta) >= 50.00) * ( 0.00 ) +
     (-1.00 <= eta && eta < -0.90) * (0.10 <= pt * cosh(eta) && pt * cosh(eta) < 6.10) * (0.000629) +
     (-1.00 <= eta && eta < -0.90) * (6.10 <= pt * cosh(eta) && pt * cosh(eta) < 6.80) * (0.020818) +
@@ -2704,7 +2704,7 @@ module IdentificationMap barrelDIRC {
     (0.90 <= eta && eta < 1.00) * (34.50 <= pt * cosh(eta) && pt * cosh(eta) < 50.00) * (0.481465) +
     (1.00 <= eta && eta < 1.10) * (0.10 <= pt * cosh(eta) && pt * cosh(eta) < 50.00) * (0.000000) }
 
-  add EfficiencyFormula {-211} {-211} {
+  add EfficiencyFormula {-211} {211} {
     (eta<-1.00 || eta>=1.00 || pt * cosh(eta) < 0.10 || pt * cosh(eta) >= 50.00) * ( 0.00 ) +
     (-1.00 <= eta && eta < -0.90) * (0.10 <= pt * cosh(eta) && pt * cosh(eta) < 0.20) * (0.000000) +
     (-1.00 <= eta && eta < -0.90) * (0.20 <= pt * cosh(eta) && pt * cosh(eta) < 5.70) * (0.999363) +
@@ -4476,7 +4476,7 @@ module IdentificationMap dualRICH_aerogel {
     (3.40 <= eta && eta < 3.50) * (27.10 <= pt * cosh(eta) && pt * cosh(eta) < 34.60) * (0.626836) +
     (3.40 <= eta && eta < 3.50) * (34.60 <= pt * cosh(eta) && pt * cosh(eta) < 50.00) * (0.608985) }
 
-  add EfficiencyFormula {321} {-211} {
+  add EfficiencyFormula {321} {211} {
     (eta<1.00 || eta>=3.50 || pt * cosh(eta) < 0.10 || pt * cosh(eta) >= 50.00) * ( 0.00 ) +
     (1.00 <= eta && eta < 1.10) * (0.10 <= pt * cosh(eta) && pt * cosh(eta) < 0.20) * (0.000000) +
     (1.00 <= eta && eta < 1.10) * (0.20 <= pt * cosh(eta) && pt * cosh(eta) < 0.80) * (0.500000) +
@@ -6168,7 +6168,7 @@ module IdentificationMap dualRICH_aerogel {
     (3.40 <= eta && eta < 3.50) * (38.30 <= pt * cosh(eta) && pt * cosh(eta) < 43.90) * (0.420015) +
     (3.40 <= eta && eta < 3.50) * (43.90 <= pt * cosh(eta) && pt * cosh(eta) < 50.00) * (0.438585) }
 
-  add EfficiencyFormula {-211} {-211} {
+  add EfficiencyFormula {-211} {211} {
     (eta<1.00 || eta>=3.50 || pt * cosh(eta) < 0.10 || pt * cosh(eta) >= 50.00) * ( 0.00 ) +
     (1.00 <= eta && eta < 1.10) * (0.10 <= pt * cosh(eta) && pt * cosh(eta) < 0.20) * (0.000000) +
     (1.00 <= eta && eta < 1.10) * (0.20 <= pt * cosh(eta) && pt * cosh(eta) < 0.80) * (0.601058) +
@@ -7842,7 +7842,7 @@ module IdentificationMap dualRICH_c2f6 {
     (3.40 <= eta && eta < 3.50) * (45.80 <= pt * cosh(eta) && pt * cosh(eta) < 48.30) * (0.961665) +
     (3.40 <= eta && eta < 3.50) * (48.30 <= pt * cosh(eta) && pt * cosh(eta) < 50.00) * (0.944030) }
 
-  add EfficiencyFormula {321} {-211} {
+  add EfficiencyFormula {321} {211} {
     (eta<1.00 || eta>=3.50 || pt * cosh(eta) < 0.10 || pt * cosh(eta) >= 50.00) * ( 0.00 ) +
     (1.00 <= eta && eta < 1.10) * (0.10 <= pt * cosh(eta) && pt * cosh(eta) < 0.20) * (0.000000) +
     (1.00 <= eta && eta < 1.10) * (0.20 <= pt * cosh(eta) && pt * cosh(eta) < 3.60) * (0.500000) +
@@ -8131,7 +8131,7 @@ module IdentificationMap dualRICH_c2f6 {
     (3.40 <= eta && eta < 3.50) * (3.60 <= pt * cosh(eta) && pt * cosh(eta) < 45.70) * (0.000704) +
     (3.40 <= eta && eta < 3.50) * (45.70 <= pt * cosh(eta) && pt * cosh(eta) < 50.00) * (0.018507) }
 
-  add EfficiencyFormula {-211} {-211} {
+  add EfficiencyFormula {-211} {211} {
     (eta<1.00 || eta>=3.50 || pt * cosh(eta) < 0.10 || pt * cosh(eta) >= 50.00) * ( 0.00 ) +
     (1.00 <= eta && eta < 1.10) * (0.10 <= pt * cosh(eta) && pt * cosh(eta) < 0.20) * (0.000000) +
     (1.00 <= eta && eta < 1.10) * (0.20 <= pt * cosh(eta) && pt * cosh(eta) < 3.60) * (0.601058) +
