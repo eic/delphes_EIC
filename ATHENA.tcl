@@ -1,8 +1,5 @@
 ######################################################################################################################
-# EIC detector model
-# based on parameters from EIC detector matrix from EIC yellow report https://physdiv.jlab.org/DetectorMatrix/
-# as well as on assumptions on calorimeter granularity and tracking efficiency (not specified in handbook).
-#Berkeley all-silicon tracker 3.0 T. Taken from slides from Rey Cruz-Torres https://indico.bnl.gov/event/7913/
+# ATHENA detector model. Based on parametrizations from G4 simulations made by the ATHENA collaboration
 # email: miguel.arratia@ucr.edu, ssekula@mail.smu.edu
 #######################################################################################################################
 
@@ -103,7 +100,6 @@ module ParticlePropagator ParticlePropagator {
 ####################################
 # Common Tracking Efficiency Model
 ####################################
-#Dummy efficiency (100%). Leaving structure to show how tracking dependent on pt and eta can be incorporated)
 #
 
 #From EIC YR detector matrix:
@@ -116,7 +112,7 @@ module ParticlePropagator ParticlePropagator {
 
 set CommonTrackingEfficiency {
 
-    (abs(eta) <= 1.0) * (pt > 0.400)                     * (1.0) +
+    (abs(eta) <= 1.0 ) * (pt > 0.400)                     * (1.0) +
     (abs(eta) > 1.0 && abs(eta) <= 1.5) * (pt > 0.300)   * (1.0) +
     (abs(eta) > 1.5 && abs(eta) <= 2.0) * (pt > 0.160)   * (1.0) +
     (abs(eta) > 2.0 && abs(eta) <= 2.5) * (pt > 0.220)   * (1.0) +
@@ -127,16 +123,25 @@ set CommonTrackingEfficiency {
     0.0
 }
 
-#Berkeley all-silicon tracker 3.0 T. Taken from slides from Rey Cruz-Torres https://indico.bnl.gov/event/7913/
+#ATHENA Hybrid design
 set CommonTrackingResolution {
-    (abs(eta)<=0.5)                  * (sqrt( (3.69e-3)^2 + (pt*cosh(eta)*1.8e-4)^2  ) )  +
-    (abs(eta)<=1.0 && abs(eta)>0.5) * (sqrt( (4.28e-3)^2 + (pt*cosh(eta)*1.6e-4)^2   ) )  +
-    (abs(eta)<=1.5 && abs(eta)>1.0) * (sqrt( (4.27e-3)^2 + (pt*cosh(eta)*1.6e-4)^2   ) )  +
-    (abs(eta)<=2.0 && abs(eta)>1.5) * (sqrt( (4.62e-3)^2 + (pt*cosh(eta)*1.2e-4)^2   ) )  +
-    (abs(eta)<=2.5 && abs(eta)>2.0) * (sqrt( (7.19e-3)^2 + (pt*cosh(eta)*1.8e-4)^2   ) )  +
-    (abs(eta)<=3.0 && abs(eta)>2.5) * (sqrt( (1.34e-2)^2 + (pt*cosh(eta)*3.9e-4)^2   ) )  +
-    (abs(eta)<=3.5 && abs(eta)>3.0) * (sqrt( (2.43e-2)^2 + (pt*cosh(eta)*1.03e-3)^2  ) )  +
-    (abs(eta)<=4.0 && abs(eta)>3.5) * (sqrt( (4.56e-2)^2 + (pt*cosh(eta)*2.95e-3)^2  ) )
+
+    (eta<=-3.0 and eta>-3.5)  * (sqrt( (1.841e-2)^2 + (pt*cosh(eta)*7.1e-4)^2  ) )  +
+    (eta<=-2.5 and eta>-3.0)  * (sqrt( (1.080e-2)^2 + (pt*cosh(eta)*1.7e-4)^2  ) )  +
+    (eta<=-2.0 and eta>-2.5)  * (sqrt( (6.33e-3)^2 + (pt*cosh(eta)*1.3e-4)^2  ) )  +
+    (eta<=-1.5 and eta>-2.0)  * (sqrt( (4.76e-3)^2 + (pt*cosh(eta)*1.1e-4)^2  ) )  +
+    (eta<=-1.0 and eta>-1.5)  * (sqrt( (4.33e-3)^2 + (pt*cosh(eta)*1.6e-4)^2  ) )  +
+    (eta<=-0.5 and eta>-1.0)  * (sqrt( (3.98e-3)^2 + (pt*cosh(eta)*5.0e-4)^2  ) )  +
+    (eta<= 0.0 and eta>-0.5)  * (sqrt( (3.53e-3)^2 + (pt*cosh(eta)*5.9e-4)^2  ) )  +
+
+    (eta<=0.5 and eta>0)  * (sqrt( (3.50e-3)^2 + (pt*cosh(eta)*5.9e-4)^2  ) )  +
+    (eta<=1.0 && eta>0.5) * (sqrt( (4.01e-3)^2 + (pt*cosh(eta)*5.0e-4)^2   ) )  +
+    (eta<=1.5 && eta>1.0) * (sqrt( (4.14e-3)^2 + (pt*cosh(eta)*1.5e-4)^2   ) )  +
+    (eta<=2.0 && eta>1.5) * (sqrt( (4.66e-3)^2 + (pt*cosh(eta)*1.1e-4)^2   ) )  +
+    (eta<=2.5 && eta>2.0) * (sqrt( (6.38e-3)^2 + (pt*cosh(eta)*1.3e-4)^2   ) )  +
+    (eta<=3.0 && eta>2.5) * (sqrt( (1.089e-2)^2 + (pt*cosh(eta)*1.1e-4)^2   ) )  +
+    (eta<=3.5 && eta>3.0) * (sqrt( (1.905e-2)^2 + (pt*cosh(eta)*3.1e-4)^2  ) )  
+   # (eta<=4.0 && eta>3.5) * (sqrt( (4.56e-2)^2 + (pt*cosh(eta)*2.95e-3)^2  ) )
 }
 
 
@@ -186,7 +191,7 @@ module TrackSmearing ChargedHadronSmearing {
   set CtgThetaResolutionFormula { 0.0 }
   set PhiResolutionFormula { 0.0 }
 
-# Updated Berkeley all-silicon tracker for 3.0T field. Provided by Rey Cruz-Torres on 6/29/2021
+# All-silicon tracker for 3.0T field. Provided by Rey Cruz-Torres on 6/29/2021
   set D0ResolutionFormula "
     (abs(eta)<=0.5)                   * (sqrt( (0.0045)^2 +   (0.028/(pt*cosh(eta)))^2   ) )  +
     (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0044)^2 +   (0.036/(pt*cosh(eta)))^2   ) )  +
@@ -325,10 +330,7 @@ module SimpleCalorimeter ECal {
   set EFlowTowerOutputArray eflowPhotons
 
   set IsEcal true
-  set EnergyMin 0.100
-  #does not seem possible to set minimum dependent on eta as spec in the YR.
-
-
+  set EnergyMin 0.50
   set EnergySignificanceMin 1.0
 
   set SmearTowerCenter true
@@ -348,7 +350,7 @@ module SimpleCalorimeter ECal {
 	add EtaPhiBins $eta $PhiBins
     }
 
-    ## Coverage is -3.5, -1.0 , and +1.0 to 3.5.
+    
    ## assume 0.1 x 0.1 (real cell size will be smaller, so this is to represent some cluster)
     set PhiBins {}
     for {set i -30} {$i <=30} {incr i} {
@@ -362,8 +364,6 @@ module SimpleCalorimeter ECal {
    	add EtaPhiBins $eta $PhiBins
     }
     
-
-
   add EnergyFraction {0} {0.0}
   # energy fractions for e, gamma and pi0
   add EnergyFraction {11} {1.0}
@@ -383,10 +383,14 @@ module SimpleCalorimeter ECal {
   add EnergyFraction {310} {0.3}
   add EnergyFraction {3122} {0.3}
 
-  set ResolutionFormula {          (eta <= -2.0 && eta>-4.0)                          * sqrt(energy^2*0.01^2 + energy*0.025^2 + 0.01^2)+ \
-                 		   (eta <= -1.0 && eta>-2.0 )                         * sqrt(energy^2*0.02^2 + energy*0.08^2 + 0.02^2 )+ \
-				   (eta <= 1.0  && eta> -1.0 )                        * sqrt(energy^2*0.03^2 + energy*0.14^2 + 0.02^2 )+ \
-				   (eta <= 4.0  &&  eta>1.0 )                         * sqrt(energy^2*0.02^2 + energy*0.12^2 + 0.02^2)}
+  #Crystal -4.0 to -2.3
+  #SciGlass -1.5 to -2.3
+  #Barrel ECAL   -1.5 to 1.2
+  #pECAL 1.2 to 4.0  
+  set ResolutionFormula {          (eta <= -2.3 && eta>-4.0)                          * sqrt(energy^2*0.01^2 + energy*0.020^2 )+ \
+                 		   (eta <= -1.5 && eta>-2.3 )                         * sqrt(energy^2*0.02^2 + energy*0.025^2 )+ \
+				   (eta <= 1.2  && eta> -1.5 )                        * sqrt(energy^2*0.01^2 + energy*0.055^2 )+ \
+				   (eta <= 4.0  &&  eta>1.2 )                         * sqrt(energy^2*0.02^2 + energy*0.100^2 )}
 
 }
 
@@ -405,8 +409,7 @@ module SimpleCalorimeter HCal {
 
   set IsEcal false
 
-  ##Assumes noise 100 MeV per tower.
-  set EnergyMin 0.5
+  set EnergyMin 0.300
   set EnergySignificanceMin 1.0
 
   set SmearTowerCenter true
@@ -454,9 +457,9 @@ module SimpleCalorimeter HCal {
   add EnergyFraction {3122} {0.7}
 
   # set HCalResolutionFormula {resolution formula as a function of eta and energy}
-  set ResolutionFormula {    (eta <= -1.0 && eta>-4.0)                       * sqrt(energy^2*0.10^2 + energy*0.50^2)+
-                             (eta <= 1.0 && eta>-1.0 )                       * sqrt(energy^2*0.10^2 + energy*1.00^2)+
-                             (eta <= 4.0 && eta>1.0 )                       * sqrt(energy^2*0.10^2 + energy*0.50^2)
+  set ResolutionFormula {    (eta <= -1.0 && eta>-4.0)                       * sqrt(energy^2*0.05^2 + energy*0.70^2)+
+                             (eta <= 1.0 && eta>-1.0 )                       * sqrt(energy^2*0.37^2 )+
+                             (eta <= 4.0 && eta>1.0 )                        * sqrt(energy^2*0.06^2 + energy*0.40^2)
   }
 
 }
