@@ -212,14 +212,13 @@ module TrackSmearing ChargedHadronSmearing {
 
 
   set DZResolutionFormula "
-    (abs(eta)<=0.5)                   * (sqrt( (0.0033)^2 +   (0.027/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0044)^2 +   (0.043/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0071)^2 +   (0.099/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0130)^2 +   (0.290/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0300)^2 +   (0.923/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=0.5)                   * (sqrt( (0.0034)^2 +   (0.027/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0038)^2 +   (0.036/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0056)^2 +   (0.061/(pt*cosh(eta)))^2   ) )  +
+    (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0072)^2 +   (0.116/(pt*cosh(eta)))^2   ) )  +   
+    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0095)^2 +   (0.244/(pt*cosh(eta)))^2   ) )  + 
     (abs(eta)<=3.0 && abs(eta)>2.5)   * (sqrt( (0.0330)^2 +   (2.581/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=3.5 && abs(eta)>3.0)   * (sqrt( (0.1890)^2 +   (8.349/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=4.0 && abs(eta)>3.5)   * (sqrt( (0.0011)^2 +   (21.430/(pt*cosh(eta)))^2   ) )
+    (abs(eta)<=3.5 && abs(eta)>3.0)   * (sqrt( (0.1890)^2 +   (8.349/(pt*cosh(eta)))^2   ) )  
   "
 
 
@@ -260,16 +259,14 @@ module TrackSmearing MuonSmearing {
 
   
 
-
-  set DZResolutionFormula "
-    (abs(eta)<=0.5)                   * (sqrt( (0.0033)^2 +   (0.027/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0044)^2 +   (0.043/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0071)^2 +   (0.099/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0130)^2 +   (0.290/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0300)^2 +   (0.923/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=3.0 && abs(eta)>2.5)   * (sqrt( (0.0330)^2 +   (2.581/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=3.5 && abs(eta)>3.0)   * (sqrt( (0.1890)^2 +   (8.349/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=4.0 && abs(eta)>3.5)   * (sqrt( (0.0011)^2 +   (21.430/(pt*cosh(eta)))^2   ) )
+set DZResolutionFormula "                                                                                                                                                                                
+    (abs(eta)<=0.5)                   * (sqrt( (0.0034)^2 +   (0.027/(pt*cosh(eta)))^2   ) )  +                                                                                                           
+    (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0038)^2 +   (0.036/(pt*cosh(eta)))^2   ) )  +                                                                                                          
+    (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0056)^2 +   (0.061/(pt*cosh(eta)))^2   ) )  +                                                                                                           
+    (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0072)^2 +   (0.116/(pt*cosh(eta)))^2   ) )  +                                                                                                           
+    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0095)^2 +   (0.244/(pt*cosh(eta)))^2   ) )  +                                                                                                           
+    (abs(eta)<=3.0 && abs(eta)>2.5)   * (sqrt( (0.0330)^2 +   (2.581/(pt*cosh(eta)))^2   ) )  +                                                                                                           
+    (abs(eta)<=3.5 && abs(eta)>3.0)   * (sqrt( (0.1890)^2 +   (8.349/(pt*cosh(eta)))^2   ) )                                                                                                              
   "
 
 
@@ -311,17 +308,15 @@ module TrackSmearing ElectronSmearing {
 
 
 
-  set DZResolutionFormula "
-    (abs(eta)<=0.5)                   * (sqrt( (0.0033)^2 +   (0.027/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0044)^2 +   (0.043/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0071)^2 +   (0.099/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0130)^2 +   (0.290/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0300)^2 +   (0.923/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=3.0 && abs(eta)>2.5)   * (sqrt( (0.0330)^2 +   (2.581/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=3.5 && abs(eta)>3.0)   * (sqrt( (0.1890)^2 +   (8.349/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=4.0 && abs(eta)>3.5)   * (sqrt( (0.0011)^2 +   (21.430/(pt*cosh(eta)))^2   ) )
+set DZResolutionFormula "                                                                                                                                                                                
+    (abs(eta)<=0.5)                   * (sqrt( (0.0034)^2 +   (0.027/(pt*cosh(eta)))^2   ) )  +                                                                                                          
+    (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0038)^2 +   (0.036/(pt*cosh(eta)))^2   ) )  +                                                                                                           
+    (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0056)^2 +   (0.061/(pt*cosh(eta)))^2   ) )  +                                                                                                           
+    (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0072)^2 +   (0.116/(pt*cosh(eta)))^2   ) )  +                                                                                                           
+    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0095)^2 +   (0.244/(pt*cosh(eta)))^2   ) )  +                                                                                                           
+    (abs(eta)<=3.0 && abs(eta)>2.5)   * (sqrt( (0.0330)^2 +   (2.581/(pt*cosh(eta)))^2   ) )  +                                                                                                           
+    (abs(eta)<=3.5 && abs(eta)>3.0)   * (sqrt( (0.1890)^2 +   (8.349/(pt*cosh(eta)))^2   ) )                                                                                                              
   "
-
 
 }
 
