@@ -89,9 +89,9 @@ module ParticlePropagator ParticlePropagator {
     set ElectronOutputArray electrons
     set MuonOutputArray muons
     # radius of the magnetic field coverage, in m
-    set Radius 1.6
+    set Radius 1.60
     # half-length of the magnetic field coverage, in m
-    set HalfLength 1.9
+    set HalfLength 1.92
     # magnetic field
     set Bz 3.0
 }
@@ -102,24 +102,24 @@ module ParticlePropagator ParticlePropagator {
 ####################################
 #
 
-#From EIC YR detector matrix:
-#Minimum pT for B = 3 T:
-#150 MeV/c for -3.0 < eta < -2.5
-#220 MeV/c for -2.5 < eta < -2.0
-#160 MeV/c for -2.0 < eta < -1.5
-#300 MeV/c for -1.5 < eta < -1.0
-#(For B = 3T: minimum pT = 400 MeV/c with 90% acceptance (similar for pi and K))
-
+#minimum value quoted is where 80% efficiency is reached. 
 set CommonTrackingEfficiency {
+    (eta > -3.5 && eta <= -3.0 ) * (pt > 0.100)   * (1.0) +
+    (eta > -3.0 && eta <= -2.5 ) * (pt > 0.070)   * (1.0) +
+    (eta > -2.5 && eta <= -2.0)  * (pt > 0.090)   * (1.0) +
+    (eta > -2.0 && eta <= -1.5)  * (pt > 0.080)   * (1.0) +
+    (eta > -1.5 && eta <= -1.0)  * (pt > 0.080)   * (1.0) +
+    (eta > -1.0 && eta <= -0.5)  * (pt > 0.120)   * (1.0) +
+    (eta > -0.5 && eta <= 0.0)   * (pt > 0.150)   * (1.0) +
+    (eta > 0.0 && eta <= 0.5 )   * (pt > 0.150)   * (1.0) +
+    (eta > 0.5 && eta <= 1.0 )   * (pt > 0.120)   * (1.0) +
+    (eta > 1.0 && eta <= 1.5)    * (pt > 0.080)   * (1.0) +
+    (eta > 1.5 && eta <= 2.0)    * (pt > 0.080)   * (1.0) +
+    (eta > 2.0 && eta <= 2.5)    * (pt > 0.070)   * (1.0) +
+    (eta > 2.5 && eta <= 3.0)    * (pt > 0.070)   * (1.0) +
+    (eta > 3.0 && eta <= 3.5)    * (pt > 0.070)   * (1.0) +
 
-    (abs(eta) <= 1.0 ) * (pt > 0.400)                     * (1.0) +
-    (abs(eta) > 1.0 && abs(eta) <= 1.5) * (pt > 0.300)   * (1.0) +
-    (abs(eta) > 1.5 && abs(eta) <= 2.0) * (pt > 0.160)   * (1.0) +
-    (abs(eta) > 2.0 && abs(eta) <= 2.5) * (pt > 0.220)   * (1.0) +
-    (abs(eta) > 2.5 && abs(eta) <= 3.5) * (pt > 0.150)   * (1.0) +
-    (abs(eta) > 3.5 && abs(eta) <= 4.0) * (pt > 0.150)   * (1.0) +
-
-    (abs(eta) > 4.0)                                                  * (0.00)+
+    (abs(eta) > 3.5)  * (0.00)+
     0.0
 }
 
