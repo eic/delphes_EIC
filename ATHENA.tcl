@@ -125,23 +125,21 @@ set CommonTrackingEfficiency {
 
 #ATHENA Hybrid design
 set CommonTrackingResolution {
+    (eta<=-3.0 && eta>-3.5)  * (sqrt( (1.841e-2)^2 + (pt*cosh(eta)*7.1e-4)^2  ) )  +
+    (eta<=-2.5 && eta>-3.0)  * (sqrt( (1.080e-2)^2 + (pt*cosh(eta)*1.7e-4)^2  ) )  +
+    (eta<=-2.0 && eta>-2.5)  * (sqrt( (6.33e-3)^2 + (pt*cosh(eta)*0.0)^2  ) )  +
+    (eta<=-1.5 && eta>-2.0)  * (sqrt( (4.76e-3)^2 + (pt*cosh(eta)*1.1e-4)^2  ) )  +
+    (eta<=-1.0 && eta>-1.5)  * (sqrt( (4.33e-3)^2 + (pt*cosh(eta)*1.6e-4)^2  ) )  +
+    (eta<=-0.5 && eta>-1.0)  * (sqrt( (3.98e-3)^2 + (pt*cosh(eta)*5.0e-4)^2  ) )  +
+    (eta<= 0.0 && eta>-0.5)  * (sqrt( (3.53e-3)^2 + (pt*cosh(eta)*5.9e-4)^2  ) )  +
 
-    (eta<=-3.0 and eta>-3.5)  * (sqrt( (1.841e-2)^2 + (pt*cosh(eta)*7.1e-4)^2  ) )  +
-    (eta<=-2.5 and eta>-3.0)  * (sqrt( (1.080e-2)^2 + (pt*cosh(eta)*1.7e-4)^2  ) )  +
-    (eta<=-2.0 and eta>-2.5)  * (sqrt( (6.33e-3)^2 + (pt*cosh(eta)*1.3e-4)^2  ) )  +
-    (eta<=-1.5 and eta>-2.0)  * (sqrt( (4.76e-3)^2 + (pt*cosh(eta)*1.1e-4)^2  ) )  +
-    (eta<=-1.0 and eta>-1.5)  * (sqrt( (4.33e-3)^2 + (pt*cosh(eta)*1.6e-4)^2  ) )  +
-    (eta<=-0.5 and eta>-1.0)  * (sqrt( (3.98e-3)^2 + (pt*cosh(eta)*5.0e-4)^2  ) )  +
-    (eta<= 0.0 and eta>-0.5)  * (sqrt( (3.53e-3)^2 + (pt*cosh(eta)*5.9e-4)^2  ) )  +
-
-    (eta<=0.5 and eta>0)  * (sqrt( (3.50e-3)^2 + (pt*cosh(eta)*5.9e-4)^2  ) )  +
+    (eta<=0.5 && eta>0)  * (sqrt( (3.50e-3)^2 + (pt*cosh(eta)*5.9e-4)^2  ) )  +
     (eta<=1.0 && eta>0.5) * (sqrt( (4.01e-3)^2 + (pt*cosh(eta)*5.0e-4)^2   ) )  +
     (eta<=1.5 && eta>1.0) * (sqrt( (4.14e-3)^2 + (pt*cosh(eta)*1.5e-4)^2   ) )  +
     (eta<=2.0 && eta>1.5) * (sqrt( (4.66e-3)^2 + (pt*cosh(eta)*1.1e-4)^2   ) )  +
     (eta<=2.5 && eta>2.0) * (sqrt( (6.38e-3)^2 + (pt*cosh(eta)*1.3e-4)^2   ) )  +
     (eta<=3.0 && eta>2.5) * (sqrt( (1.089e-2)^2 + (pt*cosh(eta)*1.1e-4)^2   ) )  +
     (eta<=3.5 && eta>3.0) * (sqrt( (1.905e-2)^2 + (pt*cosh(eta)*3.1e-4)^2  ) )  
-   # (eta<=4.0 && eta>3.5) * (sqrt( (4.56e-2)^2 + (pt*cosh(eta)*2.95e-3)^2  ) )
 }
 
 
@@ -191,16 +189,25 @@ module TrackSmearing ChargedHadronSmearing {
   set CtgThetaResolutionFormula { 0.0 }
   set PhiResolutionFormula { 0.0 }
 
-# All-silicon tracker for 3.0T field. Provided by Rey Cruz-Torres on 6/29/2021
+    
+
   set D0ResolutionFormula "
-    (abs(eta)<=0.5)                   * (sqrt( (0.0045)^2 +   (0.028/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0044)^2 +   (0.036/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0061)^2 +   (0.062/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0086)^2 +   (0.108/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0092)^2 +   (0.222/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=3.0 && abs(eta)>2.5)   * (sqrt( (0.0093)^2 +   (0.423/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=3.5 && abs(eta)>3.0)   * (sqrt( (0.0310)^2 +   (0.831/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=4.0 && abs(eta)>3.5)   * (sqrt( (0.0810)^2 +   (1.434/(pt*cosh(eta)))^2   ) )
+    (eta<=0.0 && eta>-0.5)    * (sqrt( (0.00541)^2 +   (0.02679/(pt*cosh(eta)))^2   ) )  +
+    (eta<=-0.5 && eta>-1.0)   * (sqrt( (0.00545)^2 +   (0.02960/(pt*cosh(eta)))^2   ) )  +
+    (eta<=-1.0 && eta>-1.5)   * (sqrt( (0.00577)^2 +   (0.03561/(pt*cosh(eta)))^2   ) )  +
+    (eta<=-1.5 && eta>-2.0)   * (sqrt( (0.00550)^2 +   (0.04260/(pt*cosh(eta)))^2   ) )  +
+    (eta<=-2.0 && eta>-2.5)   * (sqrt( (0.00596)^2 +   (0.05891/(pt*cosh(eta)))^2   ) )  +
+    (eta<=-2.5 && eta>-3.0)   * (sqrt( (0.00773)^2 +   (0.07631/(pt*cosh(eta)))^2   ) )  +
+    (eta<=-3.0 && eta>-3.5)   * (sqrt( (0.01392)^2 +   (0.09182/(pt*cosh(eta)))^2   ) )  +
+
+    (eta<=0.5 && eta>0)     * (sqrt( (0.00536)^2 +   (0.02668/(pt*cosh(eta)))^2   ) )  +                                                                                                   
+    (eta<=1.0 && eta>0.5)   * (sqrt( (0.00550)^2 +   (0.02951/(pt*cosh(eta)))^2   ) )  +                                                                                                              
+    (eta<=1.5 && eta>1.0)   * (sqrt( (0.00570)^2 +   (0.03565/(pt*cosh(eta)))^2   ) )  +                                                                                                             
+   
+    (eta<=2.0 && eta>1.5)   * (sqrt( (0.00539)^2 +   (0.04250/(pt*cosh(eta)))^2   ) )  +                                                                                                                 
+    (eta<=2.5 && eta>2.0)   * (sqrt( (0.00588)^2 +   (0.05919/(pt*cosh(eta)))^2   ) )  +                                                                                                              
+    (eta<=3.0 && eta>2.5)   * (sqrt( (0.00650)^2 +   (0.07622/(pt*cosh(eta)))^2   ) )  +                                                                                                               
+    (eta<=3.5 && eta>3.0)   * (sqrt( (0.01119)^2 +   (0.09137/(pt*cosh(eta)))^2   ) )  
   "
 
 
@@ -233,17 +240,25 @@ module TrackSmearing MuonSmearing {
   set CtgThetaResolutionFormula { 0.0 }
   set PhiResolutionFormula { 0.0 }
 
-# Updated Berkeley all-silicon tracker for 3.0T field. Provided by Rey Cruz-Torres on 6/29/2021
-  set D0ResolutionFormula "
-    (abs(eta)<=0.5)                   * (sqrt( (0.0045)^2 +   (0.028/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0044)^2 +   (0.036/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0061)^2 +   (0.062/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0086)^2 +   (0.108/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0092)^2 +   (0.222/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=3.0 && abs(eta)>2.5)   * (sqrt( (0.0093)^2 +   (0.423/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=3.5 && abs(eta)>3.0)   * (sqrt( (0.0310)^2 +   (0.831/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=4.0 && abs(eta)>3.5)   * (sqrt( (0.0810)^2 +   (1.434/(pt*cosh(eta)))^2   ) )
+  set D0ResolutionFormula  "                                                                                                                                                                              
+    (eta<=0.0 && eta>-0.5)    * (sqrt( (0.00541)^2 +   (0.02679/(pt*cosh(eta)))^2   ) )  +                                                                                                                
+    (eta<=-0.5 && eta>-1.0)   * (sqrt( (0.00545)^2 +   (0.02960/(pt*cosh(eta)))^2   ) )  +                                                                                                               
+    (eta<=-1.0 && eta>-1.5)   * (sqrt( (0.00577)^2 +   (0.03561/(pt*cosh(eta)))^2   ) )  +                                                                                                                
+    (eta<=-1.5 && eta>-2.0)   * (sqrt( (0.00550)^2 +   (0.04260/(pt*cosh(eta)))^2   ) )  +                                                                                                               
+    (eta<=-2.0 && eta>-2.5)   * (sqrt( (0.00596)^2 +   (0.05891/(pt*cosh(eta)))^2   ) )  +                                                                                                                
+    (eta<=-2.5 && eta>-3.0)   * (sqrt( (0.00773)^2 +   (0.07631/(pt*cosh(eta)))^2   ) )  +                                                                                                               
+    (eta<=-3.0 && eta>-3.5)   * (sqrt( (0.01392)^2 +   (0.09182/(pt*cosh(eta)))^2   ) )  +                                                                                                              
+                                                                                                                                                                                                    
+    (eta<=0.5 && eta>0)     * (sqrt( (0.00536)^2 +   (0.02668/(pt*cosh(eta)))^2   ) )  +                                                                                                                  
+    (eta<=1.0 && eta>0.5)   * (sqrt( (0.00550)^2 +   (0.02951/(pt*cosh(eta)))^2   ) )  +                                                                                                                
+    (eta<=1.5 && eta>1.0)   * (sqrt( (0.00570)^2 +   (0.03565/(pt*cosh(eta)))^2   ) )  +                                                                                                                 
+    (eta<=2.0 && eta>1.5)   * (sqrt( (0.00539)^2 +   (0.04250/(pt*cosh(eta)))^2   ) )  +                                                                                                                 
+    (eta<=2.5 && eta>2.0)   * (sqrt( (0.00588)^2 +   (0.05919/(pt*cosh(eta)))^2   ) )  +                                                                                                                
+    (eta<=3.0 && eta>2.5)   * (sqrt( (0.00650)^2 +   (0.07622/(pt*cosh(eta)))^2   ) )  +                                                                                                                
+    (eta<=3.5 && eta>3.0)   * (sqrt( (0.01119)^2 +   (0.09137/(pt*cosh(eta)))^2   ) )                                                                                                                     
   "
+
+  
 
 
   set DZResolutionFormula "
@@ -276,17 +291,24 @@ module TrackSmearing ElectronSmearing {
   set CtgThetaResolutionFormula { 0.0 }
   set PhiResolutionFormula { 0.0 }
 
-# Updated Berkeley all-silicon tracker for 3.0T field. Provided by Rey Cruz-Torres on 6/29/2021
-  set D0ResolutionFormula "
-    (abs(eta)<=0.5)                   * (sqrt( (0.0045)^2 +   (0.028/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0044)^2 +   (0.036/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0061)^2 +   (0.062/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0086)^2 +   (0.108/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0092)^2 +   (0.222/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=3.0 && abs(eta)>2.5)   * (sqrt( (0.0093)^2 +   (0.423/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=3.5 && abs(eta)>3.0)   * (sqrt( (0.0310)^2 +   (0.831/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=4.0 && abs(eta)>3.5)   * (sqrt( (0.0810)^2 +   (1.434/(pt*cosh(eta)))^2   ) )
+  set D0ResolutionFormula  "                                                                                                                                                                              
+    (eta<=0.0 && eta>-0.5)    * (sqrt( (0.00541)^2 +   (0.02679/(pt*cosh(eta)))^2   ) )  +                                                                                                                
+    (eta<=-0.5 && eta>-1.0)   * (sqrt( (0.00545)^2 +   (0.02960/(pt*cosh(eta)))^2   ) )  +                                                                                                                
+    (eta<=-1.0 && eta>-1.5)   * (sqrt( (0.00577)^2 +   (0.03561/(pt*cosh(eta)))^2   ) )  +                                                                                                                
+    (eta<=-1.5 && eta>-2.0)   * (sqrt( (0.00550)^2 +   (0.04260/(pt*cosh(eta)))^2   ) )  +                                                                                                              
+    (eta<=-2.0 && eta>-2.5)   * (sqrt( (0.00596)^2 +   (0.05891/(pt*cosh(eta)))^2   ) )  +                                                                                                                
+    (eta<=-2.5 && eta>-3.0)   * (sqrt( (0.00773)^2 +   (0.07631/(pt*cosh(eta)))^2   ) )  +                                                                                                                
+    (eta<=-3.0 && eta>-3.5)   * (sqrt( (0.01392)^2 +   (0.09182/(pt*cosh(eta)))^2   ) )  +                                                                                                               
+                                                                                                                                                                                                          
+    (eta<=0.5 && eta>0)     * (sqrt( (0.00536)^2 +   (0.02668/(pt*cosh(eta)))^2   ) )  +                                                                                                                  
+    (eta<=1.0 && eta>0.5)   * (sqrt( (0.00550)^2 +   (0.02951/(pt*cosh(eta)))^2   ) )  +                                                                                                                  
+    (eta<=1.5 && eta>1.0)   * (sqrt( (0.00570)^2 +   (0.03565/(pt*cosh(eta)))^2   ) )  +                                                                                                                  
+    (eta<=2.0 && eta>1.5)   * (sqrt( (0.00539)^2 +   (0.04250/(pt*cosh(eta)))^2   ) )  +                                                                                                                  
+    (eta<=2.5 && eta>2.0)   * (sqrt( (0.00588)^2 +   (0.05919/(pt*cosh(eta)))^2   ) )  +                                                                                                                  
+    (eta<=3.0 && eta>2.5)   * (sqrt( (0.00650)^2 +   (0.07622/(pt*cosh(eta)))^2   ) )  +                                                                                                                  
+    (eta<=3.5 && eta>3.0)   * (sqrt( (0.01119)^2 +   (0.09137/(pt*cosh(eta)))^2   ) )                                                                                                                     
   "
+
 
 
   set DZResolutionFormula "
