@@ -101,24 +101,35 @@ module ParticlePropagator ParticlePropagator {
 # Common Tracking Efficiency Model
 ####################################
 #
-
-#minimum value quoted is where 80% efficiency is reached. 
 set CommonTrackingEfficiency {
-    (eta > -3.5 && eta <= -3.0 ) * (pt > 0.100)   * (1.0) +
-    (eta > -3.0 && eta <= -2.5 ) * (pt > 0.070)   * (1.0) +
-    (eta > -2.5 && eta <= -2.0)  * (pt > 0.090)   * (1.0) +
-    (eta > -2.0 && eta <= -1.5)  * (pt > 0.080)   * (1.0) +
-    (eta > -1.5 && eta <= -1.0)  * (pt > 0.080)   * (1.0) +
-    (eta > -1.0 && eta <= -0.5)  * (pt > 0.120)   * (1.0) +
-    (eta > -0.5 && eta <= 0.0)   * (pt > 0.150)   * (1.0) +
-    (eta > 0.0 && eta <= 0.5 )   * (pt > 0.150)   * (1.0) +
-    (eta > 0.5 && eta <= 1.0 )   * (pt > 0.120)   * (1.0) +
-    (eta > 1.0 && eta <= 1.5)    * (pt > 0.080)   * (1.0) +
-    (eta > 1.5 && eta <= 2.0)    * (pt > 0.080)   * (1.0) +
-    (eta > 2.0 && eta <= 2.5)    * (pt > 0.070)   * (1.0) +
-    (eta > 2.5 && eta <= 3.0)    * (pt > 0.070)   * (1.0) +
-    (eta > 3.0 && eta <= 3.5)    * (pt > 0.070)   * (1.0) +
-
+    (eta > -3.5 && eta <= -3.0 ) * (pt*cosh(eta) > 1.25 && pt*cosh(eta)<6.0)   * (0.875) +
+    (eta > -3.5 && eta <= -3.0 ) * (pt*cosh(eta) > 6.0 )                       * (0.95) +
+    (eta > -3.0 && eta <= -2.5 ) * (pt*cosh(eta) > 0.55 && pt*cosh(eta)<2.0)   * (0.875) +
+    (eta > -3.0 && eta <= -2.5 ) * (pt*cosh(eta) > 2.0)                        * (0.95) +
+    (eta > -2.5 && eta <= -2.0)  * (pt*cosh(eta)> 0.45 && pt*cosh(eta)<0.6)    * (0.875) +
+    (eta > -2.5 && eta <= -2.0)  * (pt*cosh(eta)>0.6)                          * (0.95) +
+    (eta > -2.0 && eta <= -1.5)  * (pt*cosh(eta)> 0.250 && pt*cosh(eta)<0.500)* (0.875) +
+    (eta > -2.0 && eta <= -1.5)  * (pt*cosh(eta)>0.500)                        * (0.95) +    
+    (eta > -1.5 && eta <= -1.0)  * (pt*cosh(eta) > 0.150 && pt*cosh(eta)<0.300)* (0.86) +
+    (eta > -1.5 && eta <= -1.0)  * (pt*cosh(eta) > 0.300)                      * (0.92) +
+    (eta > -1.0 && eta <= -0.5)  * (pt*cosh(eta) > 0.150 && pt*cosh(eta)<0.200)* (0.89) +
+    (eta > -1.0 && eta <= -0.5)  * (pt*cosh(eta) > 0.200)                      * (0.98) +
+    (eta > -0.5 && eta <= 0.0)   * (pt*cosh(eta) > 0.150 && pt*cosh(eta)<0.200)*(0.89) +
+    (eta > -0.5 && eta <= 0.0)   * (pt*cosh(eta) > 0.200 )                     * (0.98) +
+    (eta > 0.0 && eta <= 0.5 )   * (pt*cosh(eta) > 0.150 && pt*cosh(eta)<0.200)* (0.89) +
+    (eta > 0.0 && eta <= 0.5 )   * (pt*cosh(eta) > 0.200)                      * (0.98) +
+    (eta > 0.5 && eta <= 1.0 )   * (pt*cosh(eta) > 0.150 && pt*cosh(eta)<0.200)* (0.89) +
+    (eta > 0.5 && eta <= 1.0 )   * (pt*cosh(eta) > 0.200)                      * (0.98) +
+    (eta > 1.0 && eta <= 1.5)    * (pt*cosh(eta) > 0.150 && pt*cosh(eta)<0.200)* (0.86) +
+    (eta > 1.0 && eta <= 1.5)    * (pt*cosh(eta) > 0.200)                      * (0.92) +
+    (eta > 1.5 && eta <= 2.0)    * (pt*cosh(eta) > 0.250 && pt*cosh(eta)<0.500)* (0.89) +
+    (eta > 1.5 && eta <= 2.0)    * (pt*cosh(eta) > 0.500)                      * (0.98) +
+    (eta > 2.0 && eta <= 2.5)    * (pt*cosh(eta) > 0.350 && pt*cosh(eta)<0.700)* (0.88) +
+    (eta > 2.0 && eta <= 2.5)    * (pt*cosh(eta) > 0.700)                      * (0.97) +
+    (eta > 2.5 && eta <= 3.0)    * (pt*cosh(eta) > 0.550 && pt*cosh(eta)<2.0)  * (0.95) +
+    (eta > 2.5 && eta <= 3.0)    * (pt*cosh(eta) > 2.0)                        * (0.87) +
+    (eta > 3.0 && eta <= 3.5)    * (pt*cosh(eta) > 0.850 && pt*cosh(eta)<4.0)  * (0.87) +
+    (eta > 3.0 && eta <= 3.5)    * (pt*cosh(eta) > 4.0)                        * (0.95) +
     (abs(eta) > 3.5)  * (0.00)+
     0.0
 }
