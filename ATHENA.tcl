@@ -3830,8 +3830,11 @@ module IdentificationMap barrelDIRC {
 
 
 #source dualRICH_aerogel_0.00mrad.tcl
+#source dualRICH_aerogel_0.50mrad.tcl
 source dualRICH_aerogel_0.25mrad.tcl
-source dualRICH_c2f6_0.00mrad.tcl 
+source dualRICH_c2f6_0.25mrad.tcl
+#source dualRICH_c2f6_0.00mrad.tcl
+#source dualRICH_c2f6_0.50mrad.tcl
 
 
 
