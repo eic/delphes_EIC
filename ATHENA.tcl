@@ -126,8 +126,8 @@ set CommonTrackingEfficiency {
     (eta > 1.5 && eta <= 2.0)    * (pt*cosh(eta) > 0.500)                      * (0.98) +
     (eta > 2.0 && eta <= 2.5)    * (pt*cosh(eta) > 0.350 && pt*cosh(eta)<0.700)* (0.88) +
     (eta > 2.0 && eta <= 2.5)    * (pt*cosh(eta) > 0.700)                      * (0.97) +
-    (eta > 2.5 && eta <= 3.0)    * (pt*cosh(eta) > 0.550 && pt*cosh(eta)<2.0)  * (0.95) +
-    (eta > 2.5 && eta <= 3.0)    * (pt*cosh(eta) > 2.0)                        * (0.87) +
+    (eta > 2.5 && eta <= 3.0)    * (pt*cosh(eta) > 0.550 && pt*cosh(eta)<2.0)  * (0.87) +
+    (eta > 2.5 && eta <= 3.0)    * (pt*cosh(eta) > 2.0)                        * (0.95) +
     (eta > 3.0 && eta <= 3.5)    * (pt*cosh(eta) > 0.850 && pt*cosh(eta)<4.0)  * (0.87) +
     (eta > 3.0 && eta <= 3.5)    * (pt*cosh(eta) > 4.0)                        * (0.95) +
     (abs(eta) > 3.5)  * (0.00)+
@@ -203,33 +203,33 @@ module TrackSmearing ChargedHadronSmearing {
     
 
   set D0ResolutionFormula "
-    (eta<=0.0 && eta>-0.5)    * (sqrt( (0.00541)^2 +   (0.02679/(pt*cosh(eta)))^2   ) )  +
-    (eta<=-0.5 && eta>-1.0)   * (sqrt( (0.00545)^2 +   (0.02960/(pt*cosh(eta)))^2   ) )  +
-    (eta<=-1.0 && eta>-1.5)   * (sqrt( (0.00577)^2 +   (0.03561/(pt*cosh(eta)))^2   ) )  +
-    (eta<=-1.5 && eta>-2.0)   * (sqrt( (0.00550)^2 +   (0.04260/(pt*cosh(eta)))^2   ) )  +
-    (eta<=-2.0 && eta>-2.5)   * (sqrt( (0.00596)^2 +   (0.05891/(pt*cosh(eta)))^2   ) )  +
-    (eta<=-2.5 && eta>-3.0)   * (sqrt( (0.00773)^2 +   (0.07631/(pt*cosh(eta)))^2   ) )  +
-    (eta<=-3.0 && eta>-3.5)   * (sqrt( (0.01392)^2 +   (0.09182/(pt*cosh(eta)))^2   ) )  +
+    (eta<=0.0 && eta>-0.5)    * (sqrt( (0.00541)^2 +   (0.02679/pt)^2   ) )  +
+    (eta<=-0.5 && eta>-1.0)   * (sqrt( (0.00545)^2 +   (0.02960/pt)^2   ) )  +
+    (eta<=-1.0 && eta>-1.5)   * (sqrt( (0.00577)^2 +   (0.03561/pt)^2   ) )  +
+    (eta<=-1.5 && eta>-2.0)   * (sqrt( (0.00550)^2 +   (0.04260/pt)^2   ) )  +
+    (eta<=-2.0 && eta>-2.5)   * (sqrt( (0.00596)^2 +   (0.05891/pt)^2   ) )  +
+    (eta<=-2.5 && eta>-3.0)   * (sqrt( (0.00773)^2 +   (0.07631/pt)^2   ) )  +
+    (eta<=-3.0 && eta>-3.5)   * (sqrt( (0.01392)^2 +   (0.09182/pt)^2   ) )  +
 
-    (eta<=0.5 && eta>0)     * (sqrt( (0.00536)^2 +   (0.02668/(pt*cosh(eta)))^2   ) )  +                                                                                                   
-    (eta<=1.0 && eta>0.5)   * (sqrt( (0.00550)^2 +   (0.02951/(pt*cosh(eta)))^2   ) )  +                                                                                                              
-    (eta<=1.5 && eta>1.0)   * (sqrt( (0.00570)^2 +   (0.03565/(pt*cosh(eta)))^2   ) )  +                                                                                                             
+    (eta<=0.5 && eta>0)     * (sqrt( (0.00536)^2 +   (0.02668/pt)^2   ) )  +                                                                                                   
+    (eta<=1.0 && eta>0.5)   * (sqrt( (0.00550)^2 +   (0.02951/pt)^2   ) )  +                                                                                                              
+    (eta<=1.5 && eta>1.0)   * (sqrt( (0.00570)^2 +   (0.03565/pt)^2   ) )  +                                                                                                             
    
-    (eta<=2.0 && eta>1.5)   * (sqrt( (0.00539)^2 +   (0.04250/(pt*cosh(eta)))^2   ) )  +                                                                                                                 
-    (eta<=2.5 && eta>2.0)   * (sqrt( (0.00588)^2 +   (0.05919/(pt*cosh(eta)))^2   ) )  +                                                                                                              
-    (eta<=3.0 && eta>2.5)   * (sqrt( (0.00650)^2 +   (0.07622/(pt*cosh(eta)))^2   ) )  +                                                                                                               
-    (eta<=3.5 && eta>3.0)   * (sqrt( (0.01119)^2 +   (0.09137/(pt*cosh(eta)))^2   ) )  
+    (eta<=2.0 && eta>1.5)   * (sqrt( (0.00539)^2 +   (0.04250/pt)^2   ) )  +                                                                                                                 
+    (eta<=2.5 && eta>2.0)   * (sqrt( (0.00588)^2 +   (0.05919/pt)^2   ) )  +                                                                                                              
+    (eta<=3.0 && eta>2.5)   * (sqrt( (0.00650)^2 +   (0.07622/pt)^2   ) )  +                                                                                                               
+    (eta<=3.5 && eta>3.0)   * (sqrt( (0.01119)^2 +   (0.09137/pt)^2   ) )  
   "
 
 
   set DZResolutionFormula "
-    (abs(eta)<=0.5)                   * (sqrt( (0.0034)^2 +   (0.027/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0038)^2 +   (0.036/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0056)^2 +   (0.061/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0072)^2 +   (0.116/(pt*cosh(eta)))^2   ) )  +   
-    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0095)^2 +   (0.244/(pt*cosh(eta)))^2   ) )  + 
-    (abs(eta)<=3.0 && abs(eta)>2.5)   * (sqrt( (0.0330)^2 +   (2.581/(pt*cosh(eta)))^2   ) )  +
-    (abs(eta)<=3.5 && abs(eta)>3.0)   * (sqrt( (0.1890)^2 +   (8.349/(pt*cosh(eta)))^2   ) )  
+    (abs(eta)<=0.5)                   * (sqrt( (0.0034)^2 +   (0.027/pt)^2   ) )  +
+    (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0038)^2 +   (0.036/pt)^2   ) )  +
+    (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0056)^2 +   (0.061/pt)^2   ) )  +
+    (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0072)^2 +   (0.116/pt)^2   ) )  +   
+    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0095)^2 +   (0.244/pt)^2   ) )  + 
+    (abs(eta)<=3.0 && abs(eta)>2.5)   * (sqrt( (0.0330)^2 +   (2.581/pt)^2   ) )  +
+    (abs(eta)<=3.5 && abs(eta)>3.0)   * (sqrt( (0.1890)^2 +   (8.349/pt)^2   ) )  
   "
 
 
@@ -251,33 +251,33 @@ module TrackSmearing MuonSmearing {
   set PhiResolutionFormula { 0.0 }
 
   set D0ResolutionFormula  "                                                                                                                                                                              
-    (eta<=0.0 && eta>-0.5)    * (sqrt( (0.00541)^2 +   (0.02679/(pt*cosh(eta)))^2   ) )  +                                                                                                                
-    (eta<=-0.5 && eta>-1.0)   * (sqrt( (0.00545)^2 +   (0.02960/(pt*cosh(eta)))^2   ) )  +                                                                                                               
-    (eta<=-1.0 && eta>-1.5)   * (sqrt( (0.00577)^2 +   (0.03561/(pt*cosh(eta)))^2   ) )  +                                                                                                                
-    (eta<=-1.5 && eta>-2.0)   * (sqrt( (0.00550)^2 +   (0.04260/(pt*cosh(eta)))^2   ) )  +                                                                                                               
-    (eta<=-2.0 && eta>-2.5)   * (sqrt( (0.00596)^2 +   (0.05891/(pt*cosh(eta)))^2   ) )  +                                                                                                                
-    (eta<=-2.5 && eta>-3.0)   * (sqrt( (0.00773)^2 +   (0.07631/(pt*cosh(eta)))^2   ) )  +                                                                                                               
-    (eta<=-3.0 && eta>-3.5)   * (sqrt( (0.01392)^2 +   (0.09182/(pt*cosh(eta)))^2   ) )  +                                                                                                              
+    (eta<=0.0 && eta>-0.5)    * (sqrt( (0.00541)^2 +   (0.02679/pt)^2   ) )  +                                                                                                                
+    (eta<=-0.5 && eta>-1.0)   * (sqrt( (0.00545)^2 +   (0.02960/pt)^2   ) )  +                                                                                                               
+    (eta<=-1.0 && eta>-1.5)   * (sqrt( (0.00577)^2 +   (0.03561/pt)^2   ) )  +                                                                                                                
+    (eta<=-1.5 && eta>-2.0)   * (sqrt( (0.00550)^2 +   (0.04260/pt)^2   ) )  +                                                                                                               
+    (eta<=-2.0 && eta>-2.5)   * (sqrt( (0.00596)^2 +   (0.05891/pt)^2   ) )  +                                                                                                                
+    (eta<=-2.5 && eta>-3.0)   * (sqrt( (0.00773)^2 +   (0.07631/pt)^2   ) )  +                                                                                                               
+    (eta<=-3.0 && eta>-3.5)   * (sqrt( (0.01392)^2 +   (0.09182/pt)^2   ) )  +                                                                                                              
                                                                                                                                                                                                     
-    (eta<=0.5 && eta>0)     * (sqrt( (0.00536)^2 +   (0.02668/(pt*cosh(eta)))^2   ) )  +                                                                                                                  
-    (eta<=1.0 && eta>0.5)   * (sqrt( (0.00550)^2 +   (0.02951/(pt*cosh(eta)))^2   ) )  +                                                                                                                
-    (eta<=1.5 && eta>1.0)   * (sqrt( (0.00570)^2 +   (0.03565/(pt*cosh(eta)))^2   ) )  +                                                                                                                 
-    (eta<=2.0 && eta>1.5)   * (sqrt( (0.00539)^2 +   (0.04250/(pt*cosh(eta)))^2   ) )  +                                                                                                                 
-    (eta<=2.5 && eta>2.0)   * (sqrt( (0.00588)^2 +   (0.05919/(pt*cosh(eta)))^2   ) )  +                                                                                                                
-    (eta<=3.0 && eta>2.5)   * (sqrt( (0.00650)^2 +   (0.07622/(pt*cosh(eta)))^2   ) )  +                                                                                                                
-    (eta<=3.5 && eta>3.0)   * (sqrt( (0.01119)^2 +   (0.09137/(pt*cosh(eta)))^2   ) )                                                                                                                     
+    (eta<=0.5 && eta>0)     * (sqrt( (0.00536)^2 +   (0.02668/pt)^2   ) )  +                                                                                                                  
+    (eta<=1.0 && eta>0.5)   * (sqrt( (0.00550)^2 +   (0.02951/pt)^2   ) )  +                                                                                                                
+    (eta<=1.5 && eta>1.0)   * (sqrt( (0.00570)^2 +   (0.03565/pt)^2   ) )  +                                                                                                                 
+    (eta<=2.0 && eta>1.5)   * (sqrt( (0.00539)^2 +   (0.04250/pt)^2 ) )  +                                                                                                                 
+    (eta<=2.5 && eta>2.0)   * (sqrt( (0.00588)^2 +   (0.05919/pt)^2   ) )  +                                                                                                                
+    (eta<=3.0 && eta>2.5)   * (sqrt( (0.00650)^2 +   (0.07622/pt)^2   ) )  +                                                                                                                
+    (eta<=3.5 && eta>3.0)   * (sqrt( (0.01119)^2 +   (0.09137/pt)^2   ) )                                                                                                                     
   "
 
   
 
 set DZResolutionFormula "                                                                                                                                                                                
-    (abs(eta)<=0.5)                   * (sqrt( (0.0034)^2 +   (0.027/(pt*cosh(eta)))^2   ) )  +                                                                                                           
-    (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0038)^2 +   (0.036/(pt*cosh(eta)))^2   ) )  +                                                                                                          
-    (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0056)^2 +   (0.061/(pt*cosh(eta)))^2   ) )  +                                                                                                           
-    (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0072)^2 +   (0.116/(pt*cosh(eta)))^2   ) )  +                                                                                                           
-    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0095)^2 +   (0.244/(pt*cosh(eta)))^2   ) )  +                                                                                                           
-    (abs(eta)<=3.0 && abs(eta)>2.5)   * (sqrt( (0.0330)^2 +   (2.581/(pt*cosh(eta)))^2   ) )  +                                                                                                           
-    (abs(eta)<=3.5 && abs(eta)>3.0)   * (sqrt( (0.1890)^2 +   (8.349/(pt*cosh(eta)))^2   ) )                                                                                                              
+    (abs(eta)<=0.5)                   * (sqrt( (0.0034)^2 +   (0.027/pt)^2   ) )  +                                                                                                           
+    (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0038)^2 +   (0.036/pt)^2   ) )  +                                                                                                          
+    (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0056)^2 +   (0.061/pt)^2   ) )  +                                                                                                           
+    (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0072)^2 +   (0.116/pt)^2   ) )  +                                                                                                           
+    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0095)^2 +   (0.244/pt)^2   ) )  +                                                                                                           
+    (abs(eta)<=3.0 && abs(eta)>2.5)   * (sqrt( (0.0330)^2 +   (2.581/pt)^2   ) )  +                                                                                                           
+    (abs(eta)<=3.5 && abs(eta)>3.0)   * (sqrt( (0.1890)^2 +   (8.349/pt)^2   ) )                                                                                                              
   "
 
 
@@ -300,33 +300,33 @@ module TrackSmearing ElectronSmearing {
   set PhiResolutionFormula { 0.0 }
 
   set D0ResolutionFormula  "                                                                                                                                                                              
-    (eta<=0.0 && eta>-0.5)    * (sqrt( (0.00541)^2 +   (0.02679/(pt*cosh(eta)))^2   ) )  +                                                                                                                
-    (eta<=-0.5 && eta>-1.0)   * (sqrt( (0.00545)^2 +   (0.02960/(pt*cosh(eta)))^2   ) )  +                                                                                                                
-    (eta<=-1.0 && eta>-1.5)   * (sqrt( (0.00577)^2 +   (0.03561/(pt*cosh(eta)))^2   ) )  +                                                                                                                
-    (eta<=-1.5 && eta>-2.0)   * (sqrt( (0.00550)^2 +   (0.04260/(pt*cosh(eta)))^2   ) )  +                                                                                                              
-    (eta<=-2.0 && eta>-2.5)   * (sqrt( (0.00596)^2 +   (0.05891/(pt*cosh(eta)))^2   ) )  +                                                                                                                
-    (eta<=-2.5 && eta>-3.0)   * (sqrt( (0.00773)^2 +   (0.07631/(pt*cosh(eta)))^2   ) )  +                                                                                                                
-    (eta<=-3.0 && eta>-3.5)   * (sqrt( (0.01392)^2 +   (0.09182/(pt*cosh(eta)))^2   ) )  +                                                                                                               
+    (eta<=0.0 && eta>-0.5)    * (sqrt( (0.00541)^2 +   (0.02679/pt)^2   ) )  +                                                                                                                
+    (eta<=-0.5 && eta>-1.0)   * (sqrt( (0.00545)^2 +   (0.02960/pt)^2   ) )  +                                                                                                                
+    (eta<=-1.0 && eta>-1.5)   * (sqrt( (0.00577)^2 +   (0.03561/pt)^2   ) )  +                                                                                                                
+    (eta<=-1.5 && eta>-2.0)   * (sqrt( (0.00550)^2 +   (0.04260/pt)^2   ) )  +                                                                                                              
+    (eta<=-2.0 && eta>-2.5)   * (sqrt( (0.00596)^2 +   (0.05891/pt)^2   ) )  +                                                                                                                
+    (eta<=-2.5 && eta>-3.0)   * (sqrt( (0.00773)^2 +   (0.07631/pt)^2   ) )  +                                                                                                                
+    (eta<=-3.0 && eta>-3.5)   * (sqrt( (0.01392)^2 +   (0.09182/pt)^2   ) )  +                                                                                                               
                                                                                                                                                                                                           
-    (eta<=0.5 && eta>0)     * (sqrt( (0.00536)^2 +   (0.02668/(pt*cosh(eta)))^2   ) )  +                                                                                                                  
-    (eta<=1.0 && eta>0.5)   * (sqrt( (0.00550)^2 +   (0.02951/(pt*cosh(eta)))^2   ) )  +                                                                                                                  
-    (eta<=1.5 && eta>1.0)   * (sqrt( (0.00570)^2 +   (0.03565/(pt*cosh(eta)))^2   ) )  +                                                                                                                  
-    (eta<=2.0 && eta>1.5)   * (sqrt( (0.00539)^2 +   (0.04250/(pt*cosh(eta)))^2   ) )  +                                                                                                                  
-    (eta<=2.5 && eta>2.0)   * (sqrt( (0.00588)^2 +   (0.05919/(pt*cosh(eta)))^2   ) )  +                                                                                                                  
-    (eta<=3.0 && eta>2.5)   * (sqrt( (0.00650)^2 +   (0.07622/(pt*cosh(eta)))^2   ) )  +                                                                                                                  
-    (eta<=3.5 && eta>3.0)   * (sqrt( (0.01119)^2 +   (0.09137/(pt*cosh(eta)))^2   ) )                                                                                                                     
+    (eta<=0.5 && eta>0)     * (sqrt( (0.00536)^2 +   (0.02668/pt)^2   ) )  +                                                                                                                  
+    (eta<=1.0 && eta>0.5)   * (sqrt( (0.00550)^2 +   (0.02951/pt)^2   ) )  +                                                                                                                  
+    (eta<=1.5 && eta>1.0)   * (sqrt( (0.00570)^2 +   (0.03565/pt)^2   ) )  +                                                                                                                  
+    (eta<=2.0 && eta>1.5)   * (sqrt( (0.00539)^2 +   (0.04250/pt)^2   ) )  +                                                                                                                  
+    (eta<=2.5 && eta>2.0)   * (sqrt( (0.00588)^2 +   (0.05919/pt)^2   ) )  +                                                                                                                  
+    (eta<=3.0 && eta>2.5)   * (sqrt( (0.00650)^2 +   (0.07622/pt)^2   ) )  +                                                                                                                  
+    (eta<=3.5 && eta>3.0)   * (sqrt( (0.01119)^2 +   (0.09137/pt)^2   ) )                                                                                                                     
   "
 
 
 
 set DZResolutionFormula "                                                                                                                                                                                
-    (abs(eta)<=0.5)                   * (sqrt( (0.0034)^2 +   (0.027/(pt*cosh(eta)))^2   ) )  +                                                                                                          
-    (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0038)^2 +   (0.036/(pt*cosh(eta)))^2   ) )  +                                                                                                           
-    (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0056)^2 +   (0.061/(pt*cosh(eta)))^2   ) )  +                                                                                                           
-    (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0072)^2 +   (0.116/(pt*cosh(eta)))^2   ) )  +                                                                                                           
-    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0095)^2 +   (0.244/(pt*cosh(eta)))^2   ) )  +                                                                                                           
-    (abs(eta)<=3.0 && abs(eta)>2.5)   * (sqrt( (0.0330)^2 +   (2.581/(pt*cosh(eta)))^2   ) )  +                                                                                                           
-    (abs(eta)<=3.5 && abs(eta)>3.0)   * (sqrt( (0.1890)^2 +   (8.349/(pt*cosh(eta)))^2   ) )                                                                                                              
+    (abs(eta)<=0.5)                   * (sqrt( (0.0034)^2 +   (0.027/pt)^2   ) )  +                                                                                                          
+    (abs(eta)<=1.0 && abs(eta)>0.5)   * (sqrt( (0.0038)^2 +   (0.036/pt)^2   ) )  +                                                                                                           
+    (abs(eta)<=1.5 && abs(eta)>1.0)   * (sqrt( (0.0056)^2 +   (0.061/pt)^2   ) )  +                                                                                                           
+    (abs(eta)<=2.0 && abs(eta)>1.5)   * (sqrt( (0.0072)^2 +   (0.116/pt)^2   ) )  +                                                                                                           
+    (abs(eta)<=2.5 && abs(eta)>2.0)   * (sqrt( (0.0095)^2 +   (0.244/pt)^2   ) )  +                                                                                                           
+    (abs(eta)<=3.0 && abs(eta)>2.5)   * (sqrt( (0.0330)^2 +   (2.581/pt)^2   ) )  +                                                                                                           
+    (abs(eta)<=3.5 && abs(eta)>3.0)   * (sqrt( (0.1890)^2 +   (8.349/pt)^2   ) )                                                                                                              
   "
 
 }
@@ -358,7 +358,7 @@ module SimpleCalorimeter ECal {
   set EFlowTowerOutputArray eflowPhotons
 
   set IsEcal true
-  set EnergyMin 0.50
+  set EnergyMin 0.050
   set EnergySignificanceMin 1.0
 
   set SmearTowerCenter true
