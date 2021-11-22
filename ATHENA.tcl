@@ -816,8 +816,9 @@ module TrackCountingBTagging TrackCountingBTagging {
 # Particle ID Systems
 ##################
 
-source pfRICH_0.5mrad.tcl
-source pfRICH_0.0mrad.tcl
+source pfRICH_0.25mrad.tcl
+#source pfRICH_0.0mrad.tcl
+
 #My name is "Barrel DIRC TR=0.5 [mrad] dT=0.1 ns QE = 27 %" and I am described as follows:
 #    Eta coverage =  [-1,1]
 #    Assumed time precision = 0.1 ns
@@ -3828,10 +3829,10 @@ module IdentificationMap barrelDIRC {
 }
 
 
-#source dualRICH_aerogel_0.0mrad.tcl
-source dualRICH_aerogel_0.5mrad.tcl
-source dualRICH_c2f6_0.0mrad.tcl 
-#source dualRICH_c2f6_0.0mrad.tcl
+#source dualRICH_aerogel_0.00mrad.tcl
+source dualRICH_aerogel_0.25mrad.tcl
+source dualRICH_c2f6_0.00mrad.tcl 
+
 
 
 
